@@ -1,9 +1,8 @@
 # FovealRendering
 A simple foveal rendering system using DirectX
 
-## Foveal Rendering Level of Detail
-# Eric Knapik
-# Vic McGowen
+# Foveal Rendering Level of Detail
+### Eric Knapik & Vic McGowen
 
 The goal is to improve rendering time of a complex scene by only rendering what the user is actually looking at. Using an eye tracker, the program will be able to determine the exact parts of the scene the user is looking at and then fully render geometry within the user’s focus.
 The fovea is a small region in the center retina that is responsible for sharp, accurate vision. The fovea has the largest concentration of cones, which are in turn responsible for color vision. As the fovea provides the sharpest vision where it is pointed towards (i.e. where the individual is looking at), the individual's visual acuity is greatest at point of focus with a quick fall-off in the periphery. 
