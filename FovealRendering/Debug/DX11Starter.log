@@ -1,0 +1,7 @@
+﻿  compilation object save succeeded; see C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\PixelShader.cso
+  compilation object save succeeded; see C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\VertexShader.cso
+  Renderer.cpp
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(48): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.exe
+  DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.pdb (Full PDB)
