@@ -4,6 +4,12 @@
 #include "Camera.h"
 #include "Lights.h"
 
+
+/* This class manages and renders the objects in the most efficient way
+it can.
+
+*/
+//TODO: Actually do efficient managing of the objects
 class Renderer
 {
 public:
