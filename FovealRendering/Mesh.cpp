@@ -1,17 +1,89 @@
 #include "Mesh.h"
 
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "tiny_obj_loader.h"
+
 using namespace DirectX;
 
 Mesh::Mesh(Vertex *vertices, int numVert, int *indices, int numInd, ID3D11Device* device) {
-	this->numVert = numVert;
-	this->numInd = numInd;
-	
+	GenMesh(vertices, numVert, indices, numInd, device);
+}
+
+
+
+Mesh::Mesh(std::string fileName, ID3D11Device* device)
+{
+	std::vector<Vertex> verts;           // Verts we're assembling
+	std::vector<UINT> indices;           // Indices of these verts
+	unsigned int vertCounter = 0;        // Count of vertices/indices
+
+	tinyobj::attrib_t attrib;
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materials;
+
+	std::string err;
+	bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, fileName.c_str());
+
+	if (!err.empty()) { // `err` may contain warning message.
+		std::cerr << err << std::endl;
+	}
+
+	if (!ret) {
+		exit(1);
+	}
+
+	// Loop over shapes
+	for (size_t s = 0; s < shapes.size(); s++) {
+		// Loop over faces(polygon)
+		size_t index_offset = 0;
+		for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
+			int fv = shapes[s].mesh.num_face_vertices[f];
+
+			// Loop over vertices in the face.
+			for (size_t v = 0; v < fv; v++) {
+				// access to vertex
+				tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
+
+				Vertex vert;
+				vert.Position = DirectX::XMFLOAT3(attrib.vertices[3 * idx.vertex_index + 0],
+					attrib.vertices[3 * idx.vertex_index + 1],
+					attrib.vertices[3 * idx.vertex_index + 2]);
+				vert.UV = DirectX::XMFLOAT2(attrib.texcoords[2 * idx.texcoord_index + 0],
+					attrib.texcoords[2 * idx.texcoord_index + 1]);
+				vert.Normal = DirectX::XMFLOAT3(attrib.normals[3 * idx.normal_index + 0],
+					attrib.normals[3 * idx.normal_index + 1],
+					attrib.normals[3 * idx.normal_index + 2]);
+				verts.push_back(vert);
+				// Add vert to indicies
+				indices.push_back(vertCounter); vertCounter += 1;
+			}
+			index_offset += fv;
+
+			// per-face material
+			shapes[s].mesh.material_ids[f];
+		}
+	}
+
+	CalculateTangents(&verts[0], vertCounter, &indices[0], vertCounter);
+	GenMesh(&verts[0], vertCounter, (int*)(&indices[0]), vertCounter, device);
+}
+
+
+Mesh::~Mesh() {
+	if (vertexBuffer) { vertexBuffer->Release(); }
+	if (indexBuffer) { indexBuffer->Release(); }
+}
+
+
+void Mesh::GenMesh(Vertex * vertices, int numVertices, int * indices, int numIndices, ID3D11Device * device)
+{
+
 	// Create the VERTEX BUFFER description -----------------------------------
 	// - The description is created on the stack because we only need
 	//    it to create the buffer.  The description is then useless.
 	D3D11_BUFFER_DESC vbd;
 	vbd.Usage = D3D11_USAGE_IMMUTABLE;
-	vbd.ByteWidth = sizeof(Vertex) * numVert;       // 3 = number of vertices in the buffer
+	vbd.ByteWidth = sizeof(Vertex) * numVertices;
 	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER; // Tells DirectX this is a vertex buffer
 	vbd.CPUAccessFlags = 0;
 	vbd.MiscFlags = 0;
@@ -30,8 +102,8 @@ Mesh::Mesh(Vertex *vertices, int numVert, int *indices, int numInd, ID3D11Device
 	// - The description is created on the stack because we only need
 	//    it to create the buffer.  The description is then useless.
 	D3D11_BUFFER_DESC ibd;
-	ibd.Usage = D3D11_USAGE_IMMUTABLE; 
-	ibd.ByteWidth = sizeof(int) * numInd;         // 3 = number of indices in the buffer
+	ibd.Usage = D3D11_USAGE_IMMUTABLE;
+	ibd.ByteWidth = sizeof(int) * numIndices;         // 3 = number of indices in the buffer
 	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER; // Tells DirectX this is an index buffer
 	ibd.CPUAccessFlags = 0;
 	ibd.MiscFlags = 0;
@@ -45,197 +117,11 @@ Mesh::Mesh(Vertex *vertices, int numVert, int *indices, int numInd, ID3D11Device
 	// Actually create the buffer with the initial data
 	// - Once we do this, we'll NEVER CHANGE THE BUFFER AGAIN
 	device->CreateBuffer(&ibd, &initialIndexData, &indexBuffer);
+
+	// Lastly be sure to set the indexCount to the correct thing.
+	numInd = numIndices;
+	numVert = numVertices;
 }
-
-
-
-Mesh::Mesh(char* objFile, ID3D11Device* device) {
-	// File input object
-	std::ifstream obj(objFile);
-
-	// Check for successful open
-	if (!obj.is_open())
-		return;
-
-	// Variables used while reading the file
-	std::vector<DirectX::XMFLOAT3> positions;     // Positions from the file
-	std::vector<DirectX::XMFLOAT3> normals;       // Normals from the file
-	std::vector<DirectX::XMFLOAT2> uvs;           // UVs from the file
-	std::vector<Vertex> verts;           // Verts we're assembling
-	std::vector<UINT> indices;           // Indices of these verts
-	unsigned int vertCounter = 0;        // Count of vertices/indices
-	char chars[100];                     // String for line reading
-
-	while (obj.good())
-	{
-		// Get the line (100 characters should be more than enough)
-		obj.getline(chars, 100);
-		// Check the type of line
-		if (chars[0] == 'v' && chars[1] == 'n')
-		{
-			// Read the 3 numbers directly into an XMFLOAT3
-			DirectX::XMFLOAT3 norm;
-			sscanf_s(
-				chars,
-				"vn %f %f %f",
-				&norm.x, &norm.y, &norm.z);
-			// Add to the list of normals
-			normals.push_back(norm);
-		}
-		else if (chars[0] == 'v' && chars[1] == 't')
-		{
-			// Read the 2 numbers directly into an XMFLOAT2
-			DirectX::XMFLOAT2 uv;
-			sscanf_s(
-				chars,
-				"vt %f %f",
-				&uv.x, &uv.y);
-			// Add to the list of uv's
-			uvs.push_back(uv);
-		}
-		else if (chars[0] == 'v')
-		{
-			// Read the 3 numbers directly into an XMFLOAT3
-			DirectX::XMFLOAT3 pos;
-			sscanf_s(
-				chars,
-				"v %f %f %f",
-				&pos.x, &pos.y, &pos.z);
-			// Add to the positions
-			positions.push_back(pos);
-		}
-		else if (chars[0] == 'f')
-		{
-			// Read the face indices into an array
-			unsigned int i[12];
-			int facesRead = sscanf_s(
-				chars,
-				"f %d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d",
-				&i[0], &i[1], &i[2],
-				&i[3], &i[4], &i[5],
-				&i[6], &i[7], &i[8],
-				&i[9], &i[10], &i[11]);
-
-			// - Create the verts by looking up
-			//    corresponding data from vectors
-			// - OBJ File indices are 1-based, so
-			//    they need to be adusted
-			Vertex v1;
-			v1.Position = positions[i[0] - 1];
-			v1.UV = uvs[i[1] - 1];
-			v1.Normal = normals[i[2] - 1];
-
-			Vertex v2;
-			v2.Position = positions[i[3] - 1];
-			v2.UV = uvs[i[4] - 1];
-			v2.Normal = normals[i[5] - 1];
-
-			Vertex v3;
-			v3.Position = positions[i[6] - 1];
-			v3.UV = uvs[i[7] - 1];
-			v3.Normal = normals[i[8] - 1];
-
-			// Flip the UV's since they're probably "upside down"
-			v1.UV.y = 1.0f - v1.UV.y;
-			v2.UV.y = 1.0f - v2.UV.y;
-			v3.UV.y = 1.0f - v3.UV.y;
-
-			// Add the verts to the vector
-			verts.push_back(v1);
-			verts.push_back(v2);
-			verts.push_back(v3);
-
-			// Add three more indices
-			indices.push_back(vertCounter); vertCounter += 1;
-			indices.push_back(vertCounter); vertCounter += 1;
-			indices.push_back(vertCounter); vertCounter += 1;
-
-			// Was there a 4th face?
-			if (facesRead == 12)
-			{
-				// Make the last vertex
-				Vertex v4;
-				v4.Position = positions[i[9] - 1];
-				v4.UV = uvs[i[10] - 1];
-				v4.Normal = normals[i[11] - 1];
-
-				// Flip the y
-				v4.UV.y = 1.0f - v4.UV.y;
-
-				// Add a whole triangle
-				verts.push_back(v1);
-				verts.push_back(v3);
-				verts.push_back(v4);
-
-				// Add three more indices
-				indices.push_back(vertCounter); vertCounter += 1;
-				indices.push_back(vertCounter); vertCounter += 1;
-				indices.push_back(vertCounter); vertCounter += 1;
-			}
-		}
-	}
-
-	// Close the file and create the actual buffers
-	obj.close();
-
-	CalculateTangents(&verts[0], vertCounter, &indices[0], vertCounter);
-	this->numVert = vertCounter;
-	this->numInd = vertCounter;
-
-	D3D11_BUFFER_DESC vbd;
-	vbd.Usage = D3D11_USAGE_IMMUTABLE;
-	vbd.ByteWidth = sizeof(Vertex) * numVert;       // 3 = number of vertices in the buffer
-	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER; // Tells DirectX this is a vertex buffer
-	vbd.CPUAccessFlags = 0;
-	vbd.MiscFlags = 0;
-	vbd.StructureByteStride = 0;
-
-	D3D11_SUBRESOURCE_DATA initialVertexData;
-	initialVertexData.pSysMem = &verts[0]; // the address of the first one
-
-	device->CreateBuffer(&vbd, &initialVertexData, &vertexBuffer);
-
-
-	D3D11_BUFFER_DESC ibd;
-	ibd.Usage = D3D11_USAGE_IMMUTABLE;
-	ibd.ByteWidth = sizeof(int) * numInd;         // 3 = number of indices in the buffer
-	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER; // Tells DirectX this is an index buffer
-	ibd.CPUAccessFlags = 0;
-	ibd.MiscFlags = 0;
-	ibd.StructureByteStride = 0;
-
-	D3D11_SUBRESOURCE_DATA initialIndexData;
-	initialIndexData.pSysMem = &indices[0]; // the address of the first one
-
-	device->CreateBuffer(&ibd, &initialIndexData, &indexBuffer);
-}
-
-
-Mesh::~Mesh() {
-	if (vertexBuffer) { vertexBuffer->Release(); }
-	if (indexBuffer) { indexBuffer->Release(); }
-}
-
-
-ID3D11Buffer* Mesh::GetVertexBuffer() {
-	return this->vertexBuffer;
-}
-
-
-ID3D11Buffer* Mesh::GetIndexBuffer() {
-	return this->indexBuffer;
-}
-
-
-int Mesh::GetVertexCount() {
-	return this->numVert;
-}
-
-
-int Mesh::GetIndexCount() {
-	return this->numInd;
-}
-
 
 // Calculates the tangents of the vertices in a mesh
 // Code adapted from: http://www.terathon.com/code/tangent.html

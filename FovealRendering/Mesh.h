@@ -3,19 +3,24 @@
 #include "DXCore.h"
 #include "Vertex.h"
 #include <stdlib.h>
+#include <string>
+#include <stdio.h>
 #include <fstream>
 #include <iostream>
 #include <vector>
 
+
 class Mesh {
 public:
 	Mesh(Vertex *vertices, int numVert, int *indices, int numInd, ID3D11Device* device);
-	Mesh(char* objFile, ID3D11Device* device);
+	Mesh(std::string fileName, ID3D11Device* device);
 	~Mesh();
-	ID3D11Buffer* GetVertexBuffer();
-	ID3D11Buffer* GetIndexBuffer();
-	int GetVertexCount();
-	int GetIndexCount();
+
+	void GenMesh(Vertex * vertices, int numVertices, int * indices, int numIndices, ID3D11Device * device);
+	ID3D11Buffer* GetVertexBuffer() { return this->vertexBuffer; }
+	ID3D11Buffer* GetIndexBuffer() { return this->indexBuffer; }
+	int GetVertexCount() { return this->numVert; }
+	int GetIndexCount() { return this->numInd; }
 
 private:
 	ID3D11Buffer* vertexBuffer = 0;
