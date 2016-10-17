@@ -199,10 +199,11 @@ void Game::Update(float deltaTime, float totalTime)
 		modelChoice = (modelChoice + 1) % numEntity;
 	prevTab = currTab;
 
-	// RESET THE CAMERA
+	// RESET THE CAMERA 
 	if (GetAsyncKeyState('R') & 0x8000)
 		camera->ResetCamera();
 
+	//printf("EyePos: (%.1f, %.1f)\n", eyeTracker->GetXPos(), eyeTracker->GetYPos());
 }
 
 // --------------------------------------------------------

@@ -34,11 +34,13 @@ class EyeTracker
 public:
 	EyeTracker();
 	~EyeTracker();
-	float GetXPos() { return tobiiEyeEventXParam; }
-	float GetYPos() { return tobiiEyeEventYParam; }
+	float GetXPos() { return *curXPos; }
+	float GetYPos() { return *curYPos; }
 
 private:
 	TX_CONTEXTHANDLE hContext;
+	float* curXPos;
+	float* curYPos;
 };
 
 #endif // !TOBII_EYETRACKER

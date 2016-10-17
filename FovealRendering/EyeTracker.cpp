@@ -1,9 +1,14 @@
 #include "EyeTracker.h"
 
+extern float tobiiEyeEventXParam;
+extern float tobiiEyeEventYParam;
 
 // CPP inplementation
 EyeTracker::EyeTracker()
 {
+	curXPos = &tobiiEyeEventXParam;
+	curYPos = &tobiiEyeEventYParam;
+
 	hContext = TX_EMPTY_HANDLE;
 	TX_TICKET hConnectionStateChangedTicket = TX_INVALID_TICKET;
 	TX_TICKET hEventHandlerTicket = TX_INVALID_TICKET;
@@ -125,7 +130,7 @@ void OnGazeDataEvent(TX_HANDLE hGazeDataBehavior)
 	if (txGetGazePointDataEventParams(hGazeDataBehavior, &eventParams) == TX_RESULT_OK) {
 		tobiiEyeEventXParam = eventParams.X;
 		tobiiEyeEventYParam = eventParams.Y;
-		// printf("Gaze Data: (%.1f, %.1f) timestamp %.0f ms\n", eventParams.X, eventParams.Y, eventParams.Timestamp);
+		//printf("Gaze Data: (%.1f, %.1f) timestamp %.0f ms\n", eventParams.X, eventParams.Y, eventParams.Timestamp);
 	}
 	else {
 		// ignore this packet

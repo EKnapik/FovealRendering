@@ -1,21 +1,6 @@
-﻿  Renderer.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(48): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  Mesh.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\mesh.cpp(43): warning C4018: '<': signed/unsigned mismatch
-  Main.cpp
-  GameEntity.cpp
-  EyeTracker.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\eyetracker.cpp(126): warning C4244: '=': conversion from 'TX_REAL' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\eyetracker.cpp(127): warning C4244: '=': conversion from 'TX_REAL' to 'float', possible loss of data
-  Generating Code...
-  Compiling...
-  Game.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(265): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+﻿  Game.cpp
 c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(266): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  DXCore.cpp
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(267): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.exe
   DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.pdb (Full PDB)
   ..\tobii_lib\x86\Tobii.EyeX.Client.dll
