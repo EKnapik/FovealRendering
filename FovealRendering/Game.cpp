@@ -142,8 +142,9 @@ void Game::CreateBasicGeometry()
 	this->Meshes[7] = new Mesh("Debug/Assets/high_cone.obj", device);
 
 	// Let's try not to follow pointers
-	Meshes* cones[] = new Mesh*[3]{Meshes[6], Meshes[0], Meshes[7]};
 	this->numEntity = 6;
+	// low, mid, high poly respectively
+	Meshes* cones[] = new Mesh*[3]{Meshes[6], Meshes[0], Meshes[7]};
 	this->Entity = new GameEntity[numEntity]{
 		//GameEntity(Meshes[0], meshMaterial),
 		GameEntity(cones, meshMaterial),

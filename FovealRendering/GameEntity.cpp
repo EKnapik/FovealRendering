@@ -179,7 +179,6 @@ void GameEntity::RotateTo(float x, float y, float z)
 	RotateTo(XMFLOAT3(x, y, z));
 }
 
-//HEEEEERRRREEEEE
 Mesh* GameEntity::WhichPoly()
 {
 	// only one mesh associated with GameEntity object
@@ -192,15 +191,17 @@ Mesh* GameEntity::WhichPoly()
 	DirectX::XMFLOAT3 camPos = XMFLOAT3(0, 0, -5);
 	// need to check z value between both camera and object
 	float dif = pos.z - camPos.z;
-	if (dif > ) // low poly
+	float lowRange = 10.0f;
+	float midRange = 7.0f;
+	if (dif > lowRange ) // low poly
 	{
 		return meshes[0];
 	}
-	else if (/* condition */) // mid poly
+	else if (dif > midRange && dif <= lowRange ) // mid poly
 	{
 		return meshes[1];
 	}
-	else // low poly
+	else // high poly
 	{
 		return meshes[2];
 	}
