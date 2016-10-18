@@ -1,6 +1,7 @@
 #pragma once
 #include <DirectXMath.h>
 #include <math.h>
+#include "Camera.h"
 #include "Mesh.h"
 #include "Material.h"
 
@@ -9,11 +10,13 @@
 class GameEntity
 {
 public:
+	GameEntity(Mesh* meshes[], Material* material);
+	GameEntity(Mesh* meshes[], DirectX::XMFLOAT3 pos, Material* material);
 	GameEntity(Mesh* mesh, Material* material);
 	GameEntity(Mesh* mesh, DirectX::XMFLOAT3 pos, Material* material);
 	~GameEntity();
 
-	Mesh* GetMesh() { return mesh; }
+	Mesh* GetMesh() { return mesh; } // return the lowpoly version as default
 	Material* GetMaterial() { return material; }
 
 	// translates from the current position by:
@@ -45,14 +48,17 @@ public:
 	void RotateTo(DirectX::XMFLOAT3 dir);
 	void RotateTo(float x, float y, float z);
 
-	
+	// which poly level mesh to use as current mesh
+	Mesh* WhichPoly();
+
 	void CreateWorldMat();
 	DirectX::XMFLOAT4X4 GetWorld();
 	DirectX::XMFLOAT4X4 GetWorldClean();
 	DirectX::XMFLOAT4X4 GetRotationMat();
 
 private:
-	Mesh* mesh;
+	Mesh* meshes[]; // low, mid and high poly array
+	Mesh* mesh; // current poly level mesh to use
 	bool dirty;
 	DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT3 scale;

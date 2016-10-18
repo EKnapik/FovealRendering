@@ -2,9 +2,36 @@
 
 using namespace DirectX;
 
+// with low mid and high poly level meshes available
+GameEntity::GameEntity(Mesh* meshes[], Material* material)
+{
+	this->meshes[] = meshes[];
+	this->mesh = WhichPoly();
+	this->material = material;
+	this->dirty = true;
+	this->pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	this->scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
+	RotateTo(0.0f, 0.0f, 0.0f); // sets the rotation quaterion
+	this->world = XMFLOAT4X4();
+}
+
+GameEntity::GameEntity(Mesh* meshes[], DirectX::XMFLOAT3 pos, Material* material)
+{
+	this->meshes[] = meshes[];
+	this->mesh = WhichPoly();
+	this->material = material;
+	this->dirty = true;
+	this->pos = pos;
+	this->scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
+	RotateTo(0.0f, 0.0f, 0.0f); // sets the rotation quaterion
+	this->world = XMFLOAT4X4();
+}
+
+// just single mesh for game entity
 GameEntity::GameEntity(Mesh* mesh, Material* material)
 {
 	this->mesh = mesh;
+	this->meshes[] = new Mesh*[1]{mesh};
 	this->material = material;
 	this->dirty = true;
 	this->pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -16,6 +43,7 @@ GameEntity::GameEntity(Mesh* mesh, Material* material)
 GameEntity::GameEntity(Mesh* mesh, DirectX::XMFLOAT3 pos, Material* material)
 {
 	this->mesh = mesh;
+	this->meshes[] = new Mesh*[1]{mesh};
 	this->material = material;
 	this->dirty = true;
 	this->pos = pos;
@@ -149,6 +177,34 @@ void GameEntity::RotateTo(DirectX::XMFLOAT3 dir)
 void GameEntity::RotateTo(float x, float y, float z)
 {
 	RotateTo(XMFLOAT3(x, y, z));
+}
+
+//HEEEEERRRREEEEE
+Mesh* GameEntity::WhichPoly()
+{
+	// only one mesh associated with GameEntity object
+	if (meshes.size() == 1)
+	{
+		return meshes[0];
+	}
+
+	//DirectX::XMFLOAT3 camPos = camera.GetPos();
+	DirectX::XMFLOAT3 camPos = XMFLOAT3(0, 0, -5);
+	// need to check z value between both camera and object
+	float dif = pos.z - camPos.z;
+	if (dif > ) // low poly
+	{
+		return meshes[0];
+	}
+	else if (/* condition */) // mid poly
+	{
+		return meshes[1];
+	}
+	else // low poly
+	{
+		return meshes[2];
+	}
+	
 }
 
 void GameEntity::CreateWorldMat()
