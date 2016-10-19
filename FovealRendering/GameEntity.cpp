@@ -3,9 +3,9 @@
 using namespace DirectX;
 
 // with low mid and high poly level meshes available
-GameEntity::GameEntity(Mesh* meshes[], Material* material)
+GameEntity::GameEntity(Mesh **meshes, Material* material)
 {
-	this->meshes[] = meshes[];
+	this->meshes = meshes;
 	this->mesh = WhichPoly();
 	this->material = material;
 	this->dirty = true;
@@ -15,9 +15,9 @@ GameEntity::GameEntity(Mesh* meshes[], Material* material)
 	this->world = XMFLOAT4X4();
 }
 
-GameEntity::GameEntity(Mesh* meshes[], DirectX::XMFLOAT3 pos, Material* material)
+GameEntity::GameEntity(Mesh **meshes, DirectX::XMFLOAT3 pos, Material* material)
 {
-	this->meshes[] = meshes[];
+	this->meshes = meshes;
 	this->mesh = WhichPoly();
 	this->material = material;
 	this->dirty = true;
@@ -31,7 +31,7 @@ GameEntity::GameEntity(Mesh* meshes[], DirectX::XMFLOAT3 pos, Material* material
 GameEntity::GameEntity(Mesh* mesh, Material* material)
 {
 	this->mesh = mesh;
-	this->meshes[] = new Mesh*[1]{mesh};
+	this->meshes = new Mesh*[1]{mesh};
 	this->material = material;
 	this->dirty = true;
 	this->pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -43,7 +43,7 @@ GameEntity::GameEntity(Mesh* mesh, Material* material)
 GameEntity::GameEntity(Mesh* mesh, DirectX::XMFLOAT3 pos, Material* material)
 {
 	this->mesh = mesh;
-	this->meshes[] = new Mesh*[1]{mesh};
+	this->meshes = new Mesh*[1]{mesh};
 	this->material = material;
 	this->dirty = true;
 	this->pos = pos;
@@ -182,10 +182,11 @@ void GameEntity::RotateTo(float x, float y, float z)
 Mesh* GameEntity::WhichPoly()
 {
 	// only one mesh associated with GameEntity object
+	/*
 	if (meshes.size() == 1)
 	{
 		return meshes[0];
-	}
+	}*/
 
 	//DirectX::XMFLOAT3 camPos = camera.GetPos();
 	DirectX::XMFLOAT3 camPos = XMFLOAT3(0, 0, -5);

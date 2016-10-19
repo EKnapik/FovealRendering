@@ -144,10 +144,14 @@ void Game::CreateBasicGeometry()
 	// Let's try not to follow pointers
 	this->numEntity = 6;
 	// low, mid, high poly respectively
-	Meshes* cones[] = new Mesh*[3]{Meshes[6], Meshes[0], Meshes[7]};
+	Mesh* cones[3];
+	cones[0] = Meshes[6];
+	cones[1] = Meshes[0];
+	cones[2] = Meshes[7];
+
 	this->Entity = new GameEntity[numEntity]{
-		//GameEntity(Meshes[0], meshMaterial),
-		GameEntity(cones, meshMaterial),
+		GameEntity(Meshes[0], meshMaterial),
+		//GameEntity(cones, meshMaterial),
 		GameEntity(Meshes[1], meshMaterial),
 		GameEntity(Meshes[2], meshMaterial),
 		GameEntity(Meshes[3], meshMaterial),

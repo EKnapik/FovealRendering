@@ -11,6 +11,7 @@ class Mesh {
 public:
 	Mesh(Vertex *vertices, int numVert, int *indices, int numInd, ID3D11Device* device);
 	Mesh(char* objFile, ID3D11Device* device);
+	Mesh();
 	~Mesh();
 	ID3D11Buffer* GetVertexBuffer();
 	ID3D11Buffer* GetIndexBuffer();

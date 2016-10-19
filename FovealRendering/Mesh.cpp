@@ -210,6 +210,9 @@ Mesh::Mesh(char* objFile, ID3D11Device* device) {
 	device->CreateBuffer(&ibd, &initialIndexData, &indexBuffer);
 }
 
+Mesh::Mesh() 
+{
+}
 
 Mesh::~Mesh() {
 	if (vertexBuffer) { vertexBuffer->Release(); }

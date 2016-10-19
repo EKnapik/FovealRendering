@@ -57,7 +57,7 @@ public:
 	DirectX::XMFLOAT4X4 GetRotationMat();
 
 private:
-	Mesh* meshes[]; // low, mid and high poly array
+	Mesh **meshes; // low, mid and high poly array
 	Mesh* mesh; // current poly level mesh to use
 	bool dirty;
 	DirectX::XMFLOAT3 pos;
