@@ -189,6 +189,10 @@ Mesh* GameEntity::WhichPoly()
 
 	//DirectX::XMFLOAT3 camPos = camera.GetPos();
 	DirectX::XMFLOAT3 camPos = XMFLOAT3(0, 0, -5);
+	
+	// transform object to camera space and see difference
+
+	// Stupid method for testing rn ~~~~
 	// need to check z value between both camera and object
 	float dif = pos.z - camPos.z;
 	float lowRange = 10.0f;
