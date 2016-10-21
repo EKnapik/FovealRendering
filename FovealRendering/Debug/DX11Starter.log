@@ -1,4 +1,2 @@
-﻿  Game.cpp
-c:\users\vicmcg\documents\fovealrendering\fovealrendering\game.cpp(271): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\vicmcg\documents\fovealrendering\fovealrendering\game.cpp(272): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+﻿  GameEntity.cpp
   DX11Starter.vcxproj -> C:\Users\vicmcg\Documents\FovealRendering\FovealRendering\Debug\FovealRendering.exe

@@ -19,6 +19,8 @@ public:
 	Mesh* GetMesh() { return mesh; } // return the lowpoly version as default
 	Material* GetMaterial() { return material; }
 
+	void SetMesh(Mesh* mesh);
+
 	// translates from the current position by:
 	void TranslateBy(DirectX::XMFLOAT3 trans);
 	void TranslateBy(float x, float y, float z);
@@ -49,7 +51,7 @@ public:
 	void RotateTo(float x, float y, float z);
 
 	// which poly level mesh to use as current mesh
-	Mesh* WhichPoly();
+	void WhichPoly(Camera* camera);
 
 	void CreateWorldMat();
 	DirectX::XMFLOAT4X4 GetWorld();

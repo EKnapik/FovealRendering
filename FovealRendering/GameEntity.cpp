@@ -6,7 +6,7 @@ using namespace DirectX;
 GameEntity::GameEntity(Mesh **meshes, Material* material)
 {
 	this->meshes = meshes;
-	this->mesh = WhichPoly();
+	this->mesh = meshes[0];//WhichPoly();
 	this->material = material;
 	this->dirty = true;
 	this->pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -18,7 +18,7 @@ GameEntity::GameEntity(Mesh **meshes, Material* material)
 GameEntity::GameEntity(Mesh **meshes, DirectX::XMFLOAT3 pos, Material* material)
 {
 	this->meshes = meshes;
-	this->mesh = WhichPoly();
+	this->mesh = meshes[0];//WhichPoly();
 	this->material = material;
 	this->dirty = true;
 	this->pos = pos;
@@ -54,6 +54,10 @@ GameEntity::GameEntity(Mesh* mesh, DirectX::XMFLOAT3 pos, Material* material)
 
 GameEntity::~GameEntity()
 {
+}
+
+void GameEntity::SetMesh(Mesh* mesh) {
+	this->mesh = mesh;
 }
 
 void GameEntity::TranslateBy(DirectX::XMFLOAT3 trans)
@@ -179,36 +183,32 @@ void GameEntity::RotateTo(float x, float y, float z)
 	RotateTo(XMFLOAT3(x, y, z));
 }
 
-Mesh* GameEntity::WhichPoly()
+void GameEntity::WhichPoly(Camera* camera)
 {
-	// only one mesh associated with GameEntity object
+	// transform object to camera space and use to determine which poly level mesh to show
 	/*
-	if (meshes.size() == 1)
-	{
-		return meshes[0];
-	}*/
-
-	//DirectX::XMFLOAT3 camPos = camera.GetPos();
-	DirectX::XMFLOAT3 camPos = XMFLOAT3(0, 0, -5);
-	
-	// transform object to camera space and see difference
+	camera in world space can just use getWorld() within
+	just reference world
+	*/
 
 	// Stupid method for testing rn ~~~~
+	DirectX::XMFLOAT3 camPos = camera->GetPos();
 	// need to check z value between both camera and object
 	float dif = pos.z - camPos.z;
+
 	float lowRange = 10.0f;
 	float midRange = 7.0f;
 	if (dif > lowRange ) // low poly
 	{
-		return meshes[0];
+		this->mesh = meshes[0];
 	}
 	else if (dif > midRange && dif <= lowRange ) // mid poly
 	{
-		return meshes[1];
+		this->mesh = meshes[1];
 	}
 	else // high poly
 	{
-		return meshes[2];
+		this->mesh = meshes[2];
 	}
 	
 }

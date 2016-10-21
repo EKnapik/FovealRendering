@@ -144,14 +144,14 @@ void Game::CreateBasicGeometry()
 	// Let's try not to follow pointers
 	this->numEntity = 6;
 	// low, mid, high poly respectively
-	Mesh* cones[3];
-	cones[0] = Meshes[6];
+	Mesh** cones = new Mesh*[3];
+	cones[0] = Meshes[3];
 	cones[1] = Meshes[0];
-	cones[2] = Meshes[7];
+	cones[2] = Meshes[4];
 
 	this->Entity = new GameEntity[numEntity]{
-		GameEntity(Meshes[0], meshMaterial),
-		//GameEntity(cones, meshMaterial),
+		//GameEntity(Meshes[0], meshMaterial),
+		GameEntity(cones, meshMaterial),
 		GameEntity(Meshes[1], meshMaterial),
 		GameEntity(Meshes[2], meshMaterial),
 		GameEntity(Meshes[3], meshMaterial),
@@ -185,6 +185,9 @@ void Game::Update(float deltaTime, float totalTime)
 	if (GetAsyncKeyState(VK_ESCAPE))
 		Quit();
 
+	// Check for poly level
+	Entity[modelChoice].WhichPoly(camera);
+
 	if (GetAsyncKeyState('W') & 0x8000)
 		camera->Forward(amount);
 	if (GetAsyncKeyState('S') & 0x8000)
@@ -203,6 +206,8 @@ void Game::Update(float deltaTime, float totalTime)
 	bool currTab = (GetAsyncKeyState('	') & 0x8000) != 0;
 	if (currTab && !prevTab)
 		modelChoice = (modelChoice + 1) % numEntity;
+		// check and update poly level mesh depending on camera location
+		//Entity[modelChoice].WhichPoly();
 	prevTab = currTab;
 
 	// RESET THE CAMERA
