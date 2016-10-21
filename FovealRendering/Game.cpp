@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Vertex.h"
 
+
 // For the DirectX Math library
 using namespace DirectX;
 
@@ -37,6 +38,7 @@ Game::Game(HINSTANCE hInstance)
 // --------------------------------------------------------
 Game::~Game()
 {
+	delete eyeTracker;
 	delete camera;
 	delete renderEngine;
 	// Release any (and all!) DirectX objects within Mesh
@@ -59,6 +61,7 @@ Game::~Game()
 // --------------------------------------------------------
 void Game::Init()
 {
+	eyeTracker = new EyeTracker();
 	camera = new Camera();
 	LoadShaders();
 	CreateMatrices();
@@ -210,10 +213,11 @@ void Game::Update(float deltaTime, float totalTime)
 		//Entity[modelChoice].WhichPoly();
 	prevTab = currTab;
 
-	// RESET THE CAMERA
+	// RESET THE CAMERA 
 	if (GetAsyncKeyState('R') & 0x8000)
 		camera->ResetCamera();
 
+	//printf("EyePos: (%.1f, %.1f)\n", eyeTracker->GetXPos(), eyeTracker->GetYPos());
 }
 
 // --------------------------------------------------------

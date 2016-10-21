@@ -8,6 +8,8 @@
 #include "Camera.h"
 #include "Lights.h"
 #include "Renderer.h"
+#include "EyeTracker.h"
+
 
 class Game 
 	: public DXCore
@@ -36,6 +38,7 @@ private:
 	void CreateMatrices();
 	void CreateBasicGeometry();
 
+	EyeTracker *eyeTracker;
 	Camera *camera;
 	Renderer *renderEngine;
 
