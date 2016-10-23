@@ -188,7 +188,9 @@ void GameEntity::WhichPoly(Camera* camera)
 	// transform object to camera space and use to determine which poly level mesh to show
 	/*
 	camera in world space can just use getWorld() within
-	just reference world
+	DirectX::XMFLOAT4X4 world = GetWorld();
+	DirectX::XMFLOAT4 pos4x4 = {pos.x, pos.y, pos.z, 1.0f};
+	DirectX::XMFLOAT4 polyCamSpace = mul(world, pos4x4);
 	*/
 
 	// Stupid method for testing rn ~~~~
