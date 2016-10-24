@@ -197,6 +197,7 @@ void GameEntity::WhichPoly(Camera* camera)
 	DirectX::XMFLOAT4X4 world = GetWorld();
 	DirectX::XMFLOAT4 pos4x4 = {pos.x, pos.y, pos.z, 1.0f};
 	DirectX::XMFLOAT4 polyCamSpace = mul(world, pos4x4);
+	std::cout<<polyCamSpace
 	*/
 
 	// Stupid method for testing rn ~~~~
