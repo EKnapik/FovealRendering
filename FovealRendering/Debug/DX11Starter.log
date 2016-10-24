@@ -1,4 +1,9 @@
 ﻿  GameEntity.cpp
+  Game.cpp
+c:\users\vicmcg\documents\fovealrendering\fovealrendering\game.cpp(188): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\vicmcg\documents\fovealrendering\fovealrendering\game.cpp(291): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\vicmcg\documents\fovealrendering\fovealrendering\game.cpp(292): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
   DX11Starter.vcxproj -> C:\Users\vicmcg\Documents\FovealRendering\FovealRendering\Debug\FovealRendering.exe
   ..\tobii_lib\x86\Tobii.EyeX.Client.dll
           1 file(s) copied.

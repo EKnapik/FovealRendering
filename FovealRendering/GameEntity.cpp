@@ -192,17 +192,19 @@ void GameEntity::WhichPoly(Camera* camera)
 	if (!detailed) { return; }
 	
 	// transform object to camera space and use to determine which poly level mesh to show
+	
+	//camera in world space can just use getWorld()
 	/*
-	camera in world space can just use getWorld() within
-	DirectX::XMFLOAT4X4 world = GetWorld();
-	DirectX::XMFLOAT4 pos4x4 = {pos.x, pos.y, pos.z, 1.0f};
-	DirectX::XMFLOAT4 polyCamSpace = mul(world, pos4x4);
-	std::cout<<polyCamSpace
+	XMFLOAT4X4 world = GetWorld();
+	XMFLOAT4 pos4x4 = {pos.x, pos.y, pos.z, 1.0f};
+	XMVECTOR vecPos4x4 = XMLoadFloat4(&pos4x4);
+	XMMATRIX worldMatrix = XMLoadFloat4x4(&world);
+	XMVECTOR polyCamSpace = XMVector4Transform(vecPos4x4, worldMatrix);
+	//std::cout << "X: " << polyCamSpace;
 	*/
 
 	// Stupid method for testing rn ~~~~
 	DirectX::XMFLOAT3 camPos = camera->GetPos();
-	// need to check z value between both camera and object
 	float dif = pos.z - camPos.z;
 
 	float lowRange = 17.0f;
