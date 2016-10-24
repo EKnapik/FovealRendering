@@ -165,7 +165,7 @@ void Game::OnResize()
 	DXCore::OnResize();
 
 	// Update our projection matrix since the window size changed
-	camera->mkProjMat(width, height);
+	camera->mkProjMat((float) width, height);
 }
 
 // --------------------------------------------------------
