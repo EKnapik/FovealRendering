@@ -141,6 +141,7 @@
     <ClCompile Include="SimpleShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="DXCore.h" />
     <ClInclude Include="EyeTracker.h" />
     <ClInclude Include="Game.h" />

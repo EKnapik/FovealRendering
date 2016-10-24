@@ -2,9 +2,36 @@
 
 using namespace DirectX;
 
+// with low mid and high poly level meshes available
+GameEntity::GameEntity(Mesh **meshes, Material* material)
+{
+	this->meshes = meshes;
+	this->mesh = meshes[0];//WhichPoly();
+	this->material = material;
+	this->dirty = true;
+	this->pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	this->scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
+	RotateTo(0.0f, 0.0f, 0.0f); // sets the rotation quaterion
+	this->world = XMFLOAT4X4();
+}
+
+GameEntity::GameEntity(Mesh **meshes, DirectX::XMFLOAT3 pos, Material* material)
+{
+	this->meshes = meshes;
+	this->mesh = meshes[0];//WhichPoly();
+	this->material = material;
+	this->dirty = true;
+	this->pos = pos;
+	this->scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
+	RotateTo(0.0f, 0.0f, 0.0f); // sets the rotation quaterion
+	this->world = XMFLOAT4X4();
+}
+
+// just single mesh for game entity
 GameEntity::GameEntity(Mesh* mesh, Material* material)
 {
 	this->mesh = mesh;
+	this->meshes = new Mesh*[1]{mesh};
 	this->material = material;
 	this->dirty = true;
 	this->pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -16,6 +43,7 @@ GameEntity::GameEntity(Mesh* mesh, Material* material)
 GameEntity::GameEntity(Mesh* mesh, DirectX::XMFLOAT3 pos, Material* material)
 {
 	this->mesh = mesh;
+	this->meshes = new Mesh*[1]{mesh};
 	this->material = material;
 	this->dirty = true;
 	this->pos = pos;
@@ -26,6 +54,10 @@ GameEntity::GameEntity(Mesh* mesh, DirectX::XMFLOAT3 pos, Material* material)
 
 GameEntity::~GameEntity()
 {
+}
+
+void GameEntity::SetMesh(Mesh* mesh) {
+	this->mesh = mesh;
 }
 
 void GameEntity::TranslateBy(DirectX::XMFLOAT3 trans)
@@ -149,6 +181,38 @@ void GameEntity::RotateTo(DirectX::XMFLOAT3 dir)
 void GameEntity::RotateTo(float x, float y, float z)
 {
 	RotateTo(XMFLOAT3(x, y, z));
+}
+
+void GameEntity::WhichPoly(Camera* camera)
+{
+	// transform object to camera space and use to determine which poly level mesh to show
+	/*
+	camera in world space can just use getWorld() within
+	DirectX::XMFLOAT4X4 world = GetWorld();
+	DirectX::XMFLOAT4 pos4x4 = {pos.x, pos.y, pos.z, 1.0f};
+	DirectX::XMFLOAT4 polyCamSpace = mul(world, pos4x4);
+	*/
+
+	// Stupid method for testing rn ~~~~
+	DirectX::XMFLOAT3 camPos = camera->GetPos();
+	// need to check z value between both camera and object
+	float dif = pos.z - camPos.z;
+
+	float lowRange = 10.0f;
+	float midRange = 7.0f;
+	if (dif > lowRange ) // low poly
+	{
+		this->mesh = meshes[0];
+	}
+	else if (dif > midRange && dif <= lowRange ) // mid poly
+	{
+		this->mesh = meshes[1];
+	}
+	else // high poly
+	{
+		this->mesh = meshes[2];
+	}
+	
 }
 
 void GameEntity::CreateWorldMat()

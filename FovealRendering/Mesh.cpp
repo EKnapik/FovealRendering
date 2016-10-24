@@ -117,10 +117,34 @@ void Mesh::GenMesh(Vertex * vertices, int numVertices, int * indices, int numInd
 	// Actually create the buffer with the initial data
 	// - Once we do this, we'll NEVER CHANGE THE BUFFER AGAIN
 	device->CreateBuffer(&ibd, &initialIndexData, &indexBuffer);
-
 	// Lastly be sure to set the indexCount to the correct thing.
 	numInd = numIndices;
 	numVert = numVertices;
+}
+
+
+Mesh::Mesh() 
+{
+}
+
+Mesh::~Mesh() {
+	if (vertexBuffer) { vertexBuffer->Release(); }
+	if (indexBuffer) { indexBuffer->Release(); }
+}
+
+
+ID3D11Buffer* Mesh::GetVertexBuffer() {
+	return this->vertexBuffer;
+}
+
+
+ID3D11Buffer* Mesh::GetIndexBuffer() {
+	return this->indexBuffer;
+}
+
+
+int Mesh::GetVertexCount() {
+	return this->numVert;
 }
 
 // Calculates the tangents of the vertices in a mesh

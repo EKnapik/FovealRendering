@@ -132,7 +132,7 @@ void Game::CreateBasicGeometry()
 	XMFLOAT4 green = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT4 blue = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 
-	this->numMeshes = 6;
+	this->numMeshes = 8;
 	// If we are worried about performance our mesh objects shouldn't follow pointers
 	this->Meshes = new Mesh*[numMeshes];
 	this->Meshes[0] = new Mesh("Debug/Assets/cone.obj", device);
@@ -141,11 +141,20 @@ void Game::CreateBasicGeometry()
 	this->Meshes[3] = new Mesh("Debug/Assets/helix.obj", device);
 	this->Meshes[4] = new Mesh("Debug/Assets/sphere.obj", device);
 	this->Meshes[5] = new Mesh("Debug/Assets/torus.obj", device);
+	this->Meshes[6] = new Mesh("Debug/Assets/low_cone.obj", device);
+	this->Meshes[7] = new Mesh("Debug/Assets/high_cone.obj", device);
 
 	// Let's try not to follow pointers
 	this->numEntity = 6;
-	this->Entity = new GameEntity[6]{
-		GameEntity(Meshes[0], meshMaterial),
+	// low, mid, high poly respectively
+	Mesh** cones = new Mesh*[3];
+	cones[0] = Meshes[3];
+	cones[1] = Meshes[0];
+	cones[2] = Meshes[4];
+
+	this->Entity = new GameEntity[numEntity]{
+		//GameEntity(Meshes[0], meshMaterial),
+		GameEntity(cones, meshMaterial),
 		GameEntity(Meshes[1], meshMaterial),
 		GameEntity(Meshes[2], meshMaterial),
 		GameEntity(Meshes[3], meshMaterial),
@@ -179,6 +188,9 @@ void Game::Update(float deltaTime, float totalTime)
 	if (GetAsyncKeyState(VK_ESCAPE))
 		Quit();
 
+	// Check for poly level
+	Entity[modelChoice].WhichPoly(camera);
+
 	if (GetAsyncKeyState('W') & 0x8000)
 		camera->Forward(amount);
 	if (GetAsyncKeyState('S') & 0x8000)
@@ -197,6 +209,8 @@ void Game::Update(float deltaTime, float totalTime)
 	bool currTab = (GetAsyncKeyState('	') & 0x8000) != 0;
 	if (currTab && !prevTab)
 		modelChoice = (modelChoice + 1) % numEntity;
+		// check and update poly level mesh depending on camera location
+		//Entity[modelChoice].WhichPoly();
 	prevTab = currTab;
 
 	// RESET THE CAMERA 

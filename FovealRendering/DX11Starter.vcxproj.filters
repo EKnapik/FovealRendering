@@ -80,7 +80,11 @@
     <ClInclude Include="EyeTracker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
+    <ClInclude Include="Camera.h">
+=======
     <ClInclude Include="tiny_obj_loader.h">
+>>>>>>> origin/master
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
