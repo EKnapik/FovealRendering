@@ -1,10 +1,23 @@
-﻿  compilation object save succeeded; see C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\NoMaterialShader.cso
+﻿C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\gBufferPixelShader.hlsl(26,18-51): warning X3576: semantics in type overridden by variable/function or enclosing type
+  
+  compilation object save succeeded; see C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\gBufferPixelShader.cso
+  compilation object save succeeded; see C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\gBufferVertexShader.cso
+  compilation object save succeeded; see C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\NoMaterialShader.cso
+  compilation object save succeeded; see C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\quadPixelShader.cso
+  compilation object save succeeded; see C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\quadVertexShader.cso
   Renderer.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(48): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(95): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(96): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(61): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(62): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(108): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(109): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Mesh.cpp
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\mesh.cpp(79): warning C4018: '<': signed/unsigned mismatch
+  Material.cpp
   Main.cpp
+  GameEntity.cpp
+  FovealRenderer.cpp
+  Generating Code...
+  Compiling...
   Game.cpp
 c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(182): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
 c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(285): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data

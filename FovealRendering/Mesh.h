@@ -12,6 +12,7 @@
 
 class Mesh {
 public:
+	Mesh(ID3D11Device* device);
 	Mesh(Vertex *vertices, int numVert, int *indices, int numInd, ID3D11Device* device);
 	Mesh(std::string fileName, ID3D11Device* device);
 	~Mesh();

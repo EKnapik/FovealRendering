@@ -32,14 +32,6 @@ void Renderer::Render(float deltaTime, float totalTime)
 }
 
 
-/* Needs to do a two part render where the stencil buffer is used to mask out the 
-   part of the screen where the high geometry would take place.
-*/
-void Renderer::DrawFoveated(GameEntity *entities, int numEntities) {
-
-}
-
-
 void Renderer::DrawOneMaterial(GameEntity *entities, int numEntities, float deltaTime, float totalTime) {
 	// Background color (Cornflower Blue)
 	const float color[4] = { 0.4f, 0.6f, 0.75f, 0.0f };

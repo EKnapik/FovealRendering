@@ -22,7 +22,7 @@ public:
 	void DrawOneMaterial(GameEntity *entities, int numEntities, float deltaTime, float totalTime);
 	void DrawNoMaterial(GameEntity *entities, int numEntities, float deltaTime, float totalTime);
 
-private:
+protected:
 	Camera *camera;
 
 	ID3D11DeviceContext*	context;
