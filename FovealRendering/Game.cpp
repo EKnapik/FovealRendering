@@ -53,6 +53,7 @@ Game::~Game()
 	// Delete our simple shader objects, which
 	// will clean up their own internal DirectX stuff
 	delete meshMaterial;
+	delete noMaterial;
 }
 
 // --------------------------------------------------------
@@ -106,6 +107,11 @@ void Game::LoadShaders()
 
 	// Create material with texture stuff
 	meshMaterial = new Material(vertexShader, pixelShader, tmpSampler, tmpSRV, tmpNormSRV);
+
+	pixelShader = new SimplePixelShader(device, context);
+	if (!pixelShader->LoadShaderFile(L"Debug/NoMaterialShader.cso"))
+		pixelShader->LoadShaderFile(L"NoMaterialShader.cso");
+	noMaterial = new Material(vertexShader, pixelShader);
 }
 
 
@@ -141,8 +147,8 @@ void Game::CreateBasicGeometry()
 	this->Meshes[3] = new Mesh("Debug/Assets/helix.obj", device);
 	this->Meshes[4] = new Mesh("Debug/Assets/sphere.obj", device);
 	this->Meshes[5] = new Mesh("Debug/Assets/torus.obj", device);
-	this->Meshes[6] = new Mesh("Debug/Assets/low_cone.obj", device);
-	this->Meshes[7] = new Mesh("Debug/Assets/high_cone.obj", device);
+	this->Meshes[6] = new Mesh("Debug/Assets/bunny.obj", device);
+	this->Meshes[7] = new Mesh("Debug/Assets/armadillo.obj", device);
 
 	// Let's try not to follow pointers
 	this->numEntity = 6;
@@ -152,15 +158,14 @@ void Game::CreateBasicGeometry()
 	cones[1] = Meshes[0];
 	cones[2] = Meshes[4];
 
-	this->Entity = new GameEntity[numEntity]{
-		//GameEntity(Meshes[0], meshMaterial),
-		GameEntity(cones, meshMaterial),
-		GameEntity(Meshes[1], meshMaterial),
-		GameEntity(Meshes[2], meshMaterial),
-		GameEntity(Meshes[3], meshMaterial),
-		GameEntity(Meshes[4], meshMaterial),
-		GameEntity(Meshes[5], meshMaterial)
-	};
+	this->Entity = new GameEntity[numEntity];
+	//GameEntity(Meshes[0], meshMaterial),
+	this->Entity[0] = GameEntity(cones, meshMaterial);
+	this->Entity[1] = GameEntity(Meshes[1], meshMaterial);
+	this->Entity[2] = GameEntity(Meshes[2], meshMaterial);
+	this->Entity[3] = GameEntity(Meshes[3], meshMaterial);
+	this->Entity[4] = GameEntity(Meshes[6], noMaterial);
+	this->Entity[5] = GameEntity(Meshes[7], noMaterial);
 }
 
 

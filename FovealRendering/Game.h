@@ -51,6 +51,7 @@ private:
 
 	// Wrappers for DirectX shaders to provide simplified functionality
 	Material* meshMaterial;
+	Material* noMaterial;
 
 	int modelChoice = 0;
 	bool prevTab = false;

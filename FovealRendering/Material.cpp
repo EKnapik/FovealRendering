@@ -21,8 +21,10 @@ Material::Material(SimpleVertexShader* vertexShader, SimplePixelShader* pixelSha
 
 Material::~Material()
 {
-	delete vertexShader;
-	delete pixelShader;
+	if (vertexShader)
+		delete vertexShader;
+	if (pixelShader)
+		delete pixelShader;
 	sampler->Release();
 	textureSRV->Release();
 	normalSRV->Release();

@@ -5,6 +5,7 @@ using namespace DirectX;
 // with low mid and high poly level meshes available
 GameEntity::GameEntity(Mesh **meshes, Material* material)
 {
+	this->detailed = true;
 	this->meshes = meshes;
 	this->mesh = meshes[0];//WhichPoly();
 	this->material = material;
@@ -17,6 +18,7 @@ GameEntity::GameEntity(Mesh **meshes, Material* material)
 
 GameEntity::GameEntity(Mesh **meshes, DirectX::XMFLOAT3 pos, Material* material)
 {
+	this->detailed = true;
 	this->meshes = meshes;
 	this->mesh = meshes[0];//WhichPoly();
 	this->material = material;
@@ -30,6 +32,7 @@ GameEntity::GameEntity(Mesh **meshes, DirectX::XMFLOAT3 pos, Material* material)
 // just single mesh for game entity
 GameEntity::GameEntity(Mesh* mesh, Material* material)
 {
+	this->detailed = false;
 	this->mesh = mesh;
 	this->meshes = new Mesh*[1]{mesh};
 	this->material = material;
@@ -42,6 +45,7 @@ GameEntity::GameEntity(Mesh* mesh, Material* material)
 
 GameEntity::GameEntity(Mesh* mesh, DirectX::XMFLOAT3 pos, Material* material)
 {
+	this->detailed = false;
 	this->mesh = mesh;
 	this->meshes = new Mesh*[1]{mesh};
 	this->material = material;
@@ -185,6 +189,8 @@ void GameEntity::RotateTo(float x, float y, float z)
 
 void GameEntity::WhichPoly(Camera* camera)
 {
+	if (!detailed) { return; }
+	
 	// transform object to camera space and use to determine which poly level mesh to show
 	/*
 	camera in world space can just use getWorld() within

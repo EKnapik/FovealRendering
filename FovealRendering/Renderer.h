@@ -17,7 +17,10 @@ public:
 		ID3D11RenderTargetView* backBufferRTV, ID3D11DepthStencilView* depthStencilView);
 	~Renderer();
 
+	void Render(float deltaTime, float totalTime);
+	void DrawFoveated(GameEntity *entities, int numEntities);
 	void DrawOneMaterial(GameEntity *entities, int numEntities, float deltaTime, float totalTime);
+	void DrawNoMaterial(GameEntity *entities, int numEntities, float deltaTime, float totalTime);
 
 private:
 	Camera *camera;

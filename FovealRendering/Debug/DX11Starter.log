@@ -1,4 +1,15 @@
-﻿  DXCore.cpp
+﻿  compilation object save succeeded; see C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\NoMaterialShader.cso
+  Renderer.cpp
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(48): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(95): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(96): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Main.cpp
+  Game.cpp
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(182): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(285): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(286): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
   DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.exe
   DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.pdb (Full PDB)
   ..\tobii_lib\x86\Tobii.EyeX.Client.dll

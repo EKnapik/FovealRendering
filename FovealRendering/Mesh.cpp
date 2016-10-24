@@ -48,8 +48,13 @@ Mesh::Mesh(std::string fileName, ID3D11Device* device)
 				vert.Position = DirectX::XMFLOAT3(attrib.vertices[3 * idx.vertex_index + 0],
 					attrib.vertices[3 * idx.vertex_index + 1],
 					attrib.vertices[3 * idx.vertex_index + 2]);
-				vert.UV = DirectX::XMFLOAT2(attrib.texcoords[2 * idx.texcoord_index + 0],
-					attrib.texcoords[2 * idx.texcoord_index + 1]);
+				if (attrib.texcoords.size() > 0) {
+					vert.UV = DirectX::XMFLOAT2(attrib.texcoords[2 * idx.texcoord_index + 0],
+						attrib.texcoords[2 * idx.texcoord_index + 1]);
+				}
+				else {
+					vert.UV = DirectX::XMFLOAT2(0, 0);
+				}
 				vert.Normal = DirectX::XMFLOAT3(attrib.normals[3 * idx.normal_index + 0],
 					attrib.normals[3 * idx.normal_index + 1],
 					attrib.normals[3 * idx.normal_index + 2]);
@@ -122,30 +127,6 @@ void Mesh::GenMesh(Vertex * vertices, int numVertices, int * indices, int numInd
 	numVert = numVertices;
 }
 
-
-Mesh::Mesh() 
-{
-}
-
-Mesh::~Mesh() {
-	if (vertexBuffer) { vertexBuffer->Release(); }
-	if (indexBuffer) { indexBuffer->Release(); }
-}
-
-
-ID3D11Buffer* Mesh::GetVertexBuffer() {
-	return this->vertexBuffer;
-}
-
-
-ID3D11Buffer* Mesh::GetIndexBuffer() {
-	return this->indexBuffer;
-}
-
-
-int Mesh::GetVertexCount() {
-	return this->numVert;
-}
 
 // Calculates the tangents of the vertices in a mesh
 // Code adapted from: http://www.terathon.com/code/tangent.html

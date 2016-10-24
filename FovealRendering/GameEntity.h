@@ -10,8 +10,9 @@
 class GameEntity
 {
 public:
-	GameEntity(Mesh* meshes[], Material* material);
-	GameEntity(Mesh* meshes[], DirectX::XMFLOAT3 pos, Material* material);
+	GameEntity() {} // needed for array construction
+	GameEntity(Mesh** meshes, Material* material);
+	GameEntity(Mesh** meshes, DirectX::XMFLOAT3 pos, Material* material);
 	GameEntity(Mesh* mesh, Material* material);
 	GameEntity(Mesh* mesh, DirectX::XMFLOAT3 pos, Material* material);
 	~GameEntity();
@@ -61,6 +62,7 @@ public:
 private:
 	Mesh **meshes; // low, mid and high poly array
 	Mesh* mesh; // current poly level mesh to use
+	bool detailed;
 	bool dirty;
 	DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT3 scale;
