@@ -205,8 +205,8 @@ void GameEntity::WhichPoly(Camera* camera)
 	// need to check z value between both camera and object
 	float dif = pos.z - camPos.z;
 
-	float lowRange = 10.0f;
-	float midRange = 7.0f;
+	float lowRange = 17.0f;
+	float midRange = 10.0f;
 	if (dif > lowRange ) // low poly
 	{
 		this->mesh = meshes[0];

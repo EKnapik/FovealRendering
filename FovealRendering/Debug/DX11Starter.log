@@ -1,29 +1,4 @@
-﻿C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\gBufferPixelShader.hlsl(26,18-51): warning X3576: semantics in type overridden by variable/function or enclosing type
-  
-  compilation object save succeeded; see C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\gBufferPixelShader.cso
-  compilation object save succeeded; see C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\gBufferVertexShader.cso
-  compilation object save succeeded; see C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\NoMaterialShader.cso
-  compilation object save succeeded; see C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\quadPixelShader.cso
-  compilation object save succeeded; see C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\quadVertexShader.cso
-  Renderer.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(61): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(62): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(108): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(109): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  Mesh.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\mesh.cpp(79): warning C4018: '<': signed/unsigned mismatch
-  Material.cpp
-  Main.cpp
-  GameEntity.cpp
-  FovealRenderer.cpp
-  Generating Code...
-  Compiling...
-  Game.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(182): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(285): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(286): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  Generating Code...
-  DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.exe
-  DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.pdb (Full PDB)
+﻿  GameEntity.cpp
+  DX11Starter.vcxproj -> C:\Users\vicmcg\Documents\FovealRendering\FovealRendering\Debug\FovealRendering.exe
   ..\tobii_lib\x86\Tobii.EyeX.Client.dll
           1 file(s) copied.

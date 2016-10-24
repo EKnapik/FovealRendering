@@ -147,25 +147,31 @@ void Game::CreateBasicGeometry()
 	this->Meshes[3] = new Mesh("Debug/Assets/helix.obj", device);
 	this->Meshes[4] = new Mesh("Debug/Assets/sphere.obj", device);
 	this->Meshes[5] = new Mesh("Debug/Assets/torus.obj", device);
-	this->Meshes[6] = new Mesh("Debug/Assets/bunny.obj", device);
-	this->Meshes[7] = new Mesh("Debug/Assets/armadillo.obj", device);
+	//this->Meshes[6] = new Mesh("Debug/Assets/bunny.obj", device);
+	//this->Meshes[7] = new Mesh("Debug/Assets/armadillo.obj", device);
 
 	// Let's try not to follow pointers
 	this->numEntity = 6;
 	// low, mid, high poly respectively
-	Mesh** cones = new Mesh*[3];
-	cones[0] = Meshes[3];
-	cones[1] = Meshes[0];
-	cones[2] = Meshes[4];
-
+	Mesh** multiPoly = new Mesh*[3];
+	
+	multiPoly[0] = new Mesh("Debug/Assets/low_bunny.obj", device);
+	multiPoly[1] = new Mesh("Debug/Assets/mid_bunny.obj", device);
+	multiPoly[2] = new Mesh("Debug/Assets/bunny.obj", device);
+	
+	/*
+	multiPoly[0] = Meshes[0];
+	multiPoly[1] = Meshes[3];
+	multiPoly[2] = Meshes[4];
+	*/
 	this->Entity = new GameEntity[numEntity];
 	//GameEntity(Meshes[0], meshMaterial),
-	this->Entity[0] = GameEntity(cones, meshMaterial);
+	this->Entity[0] = GameEntity(multiPoly, noMaterial);
 	this->Entity[1] = GameEntity(Meshes[1], meshMaterial);
 	this->Entity[2] = GameEntity(Meshes[2], meshMaterial);
 	this->Entity[3] = GameEntity(Meshes[3], meshMaterial);
-	this->Entity[4] = GameEntity(Meshes[6], noMaterial);
-	this->Entity[5] = GameEntity(Meshes[7], noMaterial);
+	//this->Entity[4] = GameEntity(Meshes[6], noMaterial);
+	//this->Entity[5] = GameEntity(Meshes[7], noMaterial);
 }
 
 
