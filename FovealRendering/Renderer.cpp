@@ -59,7 +59,8 @@ void Renderer::DrawOneMaterial(GameEntity *entities, int numEntities, float delt
 	// Send Lighting Info
 	struct PointLight pointLight = PointLight();
 	pointLight.Color = XMFLOAT4(0.8, 0.8, 0.1, 1.0);
-	pointLight.Position = XMFLOAT3(3.0*sin(totalTime), 2.0, 3.0*cos(totalTime));
+	//pointLight.Position = XMFLOAT3(3.0*sin(totalTime), 2.0, 3.0*cos(totalTime));
+	pointLight.Position = XMFLOAT3(3.0*sin(34), 3.0, 3.0*cos(34));
 	pixelShader->SetData("pointLight", &pointLight, sizeof(PointLight));
 
 	pixelShader->CopyAllBufferData();
@@ -106,7 +107,8 @@ void Renderer::DrawNoMaterial(GameEntity *entities, int numEntities, float delta
 	// Send Lighting Info
 	struct PointLight pointLight = PointLight();
 	pointLight.Color = XMFLOAT4(0.8, 0.8, 0.1, 1.0);
-	pointLight.Position = XMFLOAT3(3.0*sin(totalTime), 2.0, 3.0*cos(totalTime));
+	//pointLight.Position = XMFLOAT3(3.0*sin(totalTime), 2.0, 3.0*cos(totalTime));
+	pointLight.Position = XMFLOAT3(3.0*sin(34), 3.0, 3.0*cos(34));
 	pixelShader->SetData("pointLight", &pointLight, sizeof(PointLight));
 
 	pixelShader->CopyAllBufferData();
