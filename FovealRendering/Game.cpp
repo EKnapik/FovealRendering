@@ -152,7 +152,6 @@ void Game::CreateBasicGeometry()
 
 	// low, mid, high poly respectively
 	Mesh** multiPoly = new Mesh*[3];
-	
 	multiPoly[0] = new Mesh("Debug/Assets/low_bunny.obj", device);
 	multiPoly[1] = new Mesh("Debug/Assets/mid_bunny.obj", device);
 	multiPoly[2] = new Mesh("Debug/Assets/bunny.obj", device);

@@ -207,11 +207,11 @@ void GameEntity::WhichPoly(Camera* camera)
 	std::cout << "Object World: " << polyCamSpace.x << " " << polyCamSpace.y << " " << polyCamSpace.z << " " << "\n";
 	std::cout << "Object: " << pos.x << " " << pos.y << " " << pos.z << " " << "\n";
 	std::cout << "Camera: " << camPos.x << " " << camPos.y << " " << camPos.z << " " << "\n";
-	float dist = sqrt(pow((camPos.x - polyCamSpace.x), 2) + pow((camPos.y - polyCamSpace.y), 2) + pow((camPos.y - polyCamSpace.y), 2));
+	float dist = sqrt(pow((camPos.x - polyCamSpace.x), 2) + pow((camPos.y - polyCamSpace.y), 2) + pow((camPos.z - polyCamSpace.z), 2));
 	std::cout << "Dist: " << dist <<"\n";
 
-	lowRange = 6.0f;
-	midRange = 3.0f;
+	lowRange = 20.0f;
+	midRange = 10.0f;
 	if (dist > lowRange) // low poly
 	{
 		this->mesh = meshes[0];
