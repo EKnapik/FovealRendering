@@ -190,25 +190,46 @@ void GameEntity::RotateTo(float x, float y, float z)
 void GameEntity::WhichPoly(Camera* camera)
 {
 	if (!detailed) { return; }
-	
+
+	float lowRange;
+	float midRange;
+
 	// transform object to camera space and use to determine which poly level mesh to show
-	
-	//camera in world space can just use getWorld()
-	/*
 	XMFLOAT4X4 world = GetWorld();
-	XMFLOAT4 pos4x4 = {pos.x, pos.y, pos.z, 1.0f};
+	//XMFLOAT4X4 world = camera->GetViewMat();
+	DirectX::XMFLOAT3 camPos = camera->GetPos();
+	XMFLOAT4 pos4x4 = { pos.x, pos.y, pos.z, 1.0f };
 	XMVECTOR vecPos4x4 = XMLoadFloat4(&pos4x4);
 	XMMATRIX worldMatrix = XMLoadFloat4x4(&world);
-	XMVECTOR polyCamSpace = XMVector4Transform(vecPos4x4, worldMatrix);
-	//std::cout << "X: " << polyCamSpace;
-	*/
+	XMVECTOR polyCamSpaceVect = XMVector4Transform(vecPos4x4, worldMatrix);
+	XMFLOAT4 polyCamSpace;
+	XMStoreFloat4(&polyCamSpace, polyCamSpaceVect);
+	std::cout << "Object World: " << polyCamSpace.x << " " << polyCamSpace.y << " " << polyCamSpace.z << " " << "\n";
+	std::cout << "Object: " << pos.x << " " << pos.y << " " << pos.z << " " << "\n";
+	std::cout << "Camera: " << camPos.x << " " << camPos.y << " " << camPos.z << " " << "\n";
+	float dist = sqrt(pow((camPos.x - polyCamSpace.x), 2) + pow((camPos.y - polyCamSpace.y), 2) + pow((camPos.y - polyCamSpace.y), 2));
+	std::cout << "Dist: " << dist <<"\n";
 
+	lowRange = 6.0f;
+	midRange = 3.0f;
+	if (dist > lowRange) // low poly
+	{
+		this->mesh = meshes[0];
+	}
+	else if (dist > midRange && dist <= lowRange) // mid poly
+	{
+		this->mesh = meshes[1];
+	}
+	else // high poly
+	{
+		this->mesh = meshes[2];
+	}
+
+	/*
 	// Stupid method for testing rn ~~~~
-	DirectX::XMFLOAT3 camPos = camera->GetPos();
 	float dif = pos.z - camPos.z;
-
-	float lowRange = 17.0f;
-	float midRange = 10.0f;
+	lowRange = 17.0f;
+	midRange = 10.0f;
 	if (dif > lowRange ) // low poly
 	{
 		this->mesh = meshes[0];
@@ -220,7 +241,7 @@ void GameEntity::WhichPoly(Camera* camera)
 	else // high poly
 	{
 		this->mesh = meshes[2];
-	}
+	}*/
 	
 }
 

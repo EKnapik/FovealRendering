@@ -138,7 +138,7 @@ void Game::CreateBasicGeometry()
 	XMFLOAT4 green = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT4 blue = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 
-	this->numMeshes = 8;
+	this->numMeshes = 6;
 	// If we are worried about performance our mesh objects shouldn't follow pointers
 	this->Meshes = new Mesh*[numMeshes];
 	this->Meshes[0] = new Mesh("Debug/Assets/cone.obj", device);
@@ -150,8 +150,6 @@ void Game::CreateBasicGeometry()
 	//this->Meshes[6] = new Mesh("Debug/Assets/bunny.obj", device);
 	//this->Meshes[7] = new Mesh("Debug/Assets/armadillo.obj", device);
 
-	// Let's try not to follow pointers
-	this->numEntity = 6;
 	// low, mid, high poly respectively
 	Mesh** multiPoly = new Mesh*[3];
 	
@@ -164,6 +162,8 @@ void Game::CreateBasicGeometry()
 	multiPoly[1] = Meshes[3];
 	multiPoly[2] = Meshes[4];
 	*/
+	// Let's try not to follow pointers
+	this->numEntity = 4;
 	this->Entity = new GameEntity[numEntity];
 	//GameEntity(Meshes[0], meshMaterial),
 	this->Entity[0] = GameEntity(multiPoly, noMaterial);
