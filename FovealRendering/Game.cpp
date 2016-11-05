@@ -64,11 +64,12 @@ void Game::Init()
 {
 	eyeTracker = new EyeTracker();
 	camera = new Camera();
+	renderEngine = new Renderer(camera, device, context, backBufferRTV, depthStencilView);
+
 	LoadShaders();
 	CreateMatrices();
 	CreateBasicGeometry();
-	renderEngine = new Renderer(camera, context, backBufferRTV, depthStencilView);
-
+	
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
@@ -80,13 +81,9 @@ void Game::Init()
 // --------------------------------------------------------
 void Game::LoadShaders()
 {
-	SimpleVertexShader* vertexShader = new SimpleVertexShader(device, context);
-	if (!vertexShader->LoadShaderFile(L"Debug/VertexShader.cso"))
-		vertexShader->LoadShaderFile(L"VertexShader.cso");		
-
-	SimplePixelShader* pixelShader = new SimplePixelShader(device, context);
-	if(!pixelShader->LoadShaderFile(L"Debug/PixelShader.cso"))	
-		pixelShader->LoadShaderFile(L"PixelShader.cso");
+	renderEngine->AddVertexShader("default", L"VertexShader.cso");
+	renderEngine->AddPixelShader("default", L"PixelShader.cso");
+	renderEngine->AddPixelShader("none", L"NoMaterialShader.cso");
 
 	// Adding the Texture stuff here....
 	HRESULT result;
@@ -106,12 +103,8 @@ void Game::LoadShaders()
 	device->CreateSamplerState(&samplerDesc, &tmpSampler);
 
 	// Create material with texture stuff
-	meshMaterial = new Material(vertexShader, pixelShader, tmpSampler, tmpSRV, tmpNormSRV);
-
-	pixelShader = new SimplePixelShader(device, context);
-	if (!pixelShader->LoadShaderFile(L"Debug/NoMaterialShader.cso"))
-		pixelShader->LoadShaderFile(L"NoMaterialShader.cso");
-	noMaterial = new Material(vertexShader, pixelShader);
+	meshMaterial = new Material(tmpSampler, tmpSRV, tmpNormSRV);
+	noMaterial = new Material("none");
 }
 
 

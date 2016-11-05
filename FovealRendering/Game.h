@@ -3,6 +3,8 @@
 #include "DXCore.h"
 #include "SimpleShader.h"
 #include <DirectXMath.h>
+#include <map>
+#include <string>
 #include "Mesh.h"
 #include "GameEntity.h"
 #include "Camera.h"

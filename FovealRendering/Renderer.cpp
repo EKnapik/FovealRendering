@@ -3,10 +3,11 @@
 
 using namespace DirectX;
 
-Renderer::Renderer(Camera *camera, ID3D11DeviceContext *context,
+Renderer::Renderer(Camera *camera, ID3D11Device* device, ID3D11DeviceContext *context,
 	ID3D11RenderTargetView* backBufferRTV, ID3D11DepthStencilView* depthStencilView)
 {
 	this->camera = camera;
+	this->device = device;
 	this->context = context;
 	this->backBufferRTV = backBufferRTV;
 	this->depthStencilView = depthStencilView;
@@ -15,6 +16,15 @@ Renderer::Renderer(Camera *camera, ID3D11DeviceContext *context,
 
 Renderer::~Renderer()
 {
+	typedef std::map<std::string, SimplePixelShader*>::iterator pixel_type;
+	for (pixel_type iterator = PixelShaderDictionary.begin(); iterator != PixelShaderDictionary.end(); iterator++) {
+		delete iterator->second;
+	}
+
+	typedef std::map<std::string, SimpleVertexShader*>::iterator vertex_type;
+	for (vertex_type iterator = VertexShaderDictionary.begin(); iterator != VertexShaderDictionary.end(); iterator++) {
+		delete iterator->second;
+	}
 }
 
 void Renderer::Render(float deltaTime, float totalTime)
@@ -46,8 +56,8 @@ void Renderer::DrawOneMaterial(GameEntity *entities, int numEntities, float delt
 
 	if (numEntities == 0) return;
 	Material* material = entities[0].GetMaterial();
-	SimpleVertexShader* vertexShader = material->GetVertexShader();
-	SimplePixelShader* pixelShader = material->GetPixelShader();
+	SimpleVertexShader* vertexShader = GetVertexShader("default");
+	SimplePixelShader* pixelShader = GetPixelShader(material->GetPixelShaderName());
 	vertexShader->SetShader();
 	pixelShader->SetShader();
 
@@ -99,8 +109,8 @@ void Renderer::DrawNoMaterial(GameEntity *entities, int numEntities, float delta
 
 	if (numEntities == 0) return;
 	Material* material = entities[0].GetMaterial();
-	SimpleVertexShader* vertexShader = material->GetVertexShader();
-	SimplePixelShader* pixelShader = material->GetPixelShader();
+	SimpleVertexShader* vertexShader = GetVertexShader("default");
+	SimplePixelShader* pixelShader = GetPixelShader(material->GetPixelShaderName());
 	vertexShader->SetShader();
 	pixelShader->SetShader();
 
@@ -133,3 +143,39 @@ void Renderer::DrawNoMaterial(GameEntity *entities, int numEntities, float delta
 }
 
 
+
+
+void Renderer::AddVertexShader(std::string name, std::wstring path)
+{
+	std::wstring debug = L"Debug/";
+	debug += path;
+	SimpleVertexShader* vertexShader = new SimpleVertexShader(device, context);
+
+	if (!vertexShader->LoadShaderFile(debug.c_str()))
+	{
+		vertexShader->LoadShaderFile(path.c_str());
+	}
+	VertexShaderDictionary.insert(std::pair<std::string, SimpleVertexShader*>(name, vertexShader));
+}
+
+void Renderer::AddPixelShader(std::string name, std::wstring path)
+{
+	std::wstring debug = L"Debug/";
+	debug += path;
+	SimplePixelShader* pixelShader = new SimplePixelShader(device, context);
+	if (!pixelShader->LoadShaderFile(debug.c_str()))
+	{
+		pixelShader->LoadShaderFile(path.c_str());
+	}
+	PixelShaderDictionary.insert(std::pair<std::string, SimplePixelShader*>(name, pixelShader));
+}
+
+SimpleVertexShader * Renderer::GetVertexShader(std::string name)
+{
+	return VertexShaderDictionary.at(name);
+}
+
+SimplePixelShader * Renderer::GetPixelShader(std::string name)
+{
+	return PixelShaderDictionary.at(name);
+}

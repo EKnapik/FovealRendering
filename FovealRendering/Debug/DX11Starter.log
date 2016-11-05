@@ -1,4 +1,9 @@
-﻿  GameEntity.cpp
-  DX11Starter.vcxproj -> C:\Users\vicmcg\Documents\FovealRendering\FovealRendering\Debug\FovealRendering.exe
+﻿  Material.cpp
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  EyeTracker.cpp
+  DXCore.cpp
+  DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.exe
+  DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.pdb (Full PDB)
   ..\tobii_lib\x86\Tobii.EyeX.Client.dll
           1 file(s) copied.

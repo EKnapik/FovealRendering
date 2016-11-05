@@ -52,7 +52,9 @@
     <ClCompile Include="SimpleShader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="FovealRenderer.cpp" />
+    <ClCompile Include="FovealRenderer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -91,7 +93,9 @@
     <ClInclude Include="Vertex.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="FovealRenderer.h" />
+    <ClInclude Include="FovealRenderer.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

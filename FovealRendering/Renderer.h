@@ -1,4 +1,6 @@
 #pragma once
+#include <map>
+#include <string>
 #include <DirectXMath.h>
 #include "GameEntity.h"
 #include "Camera.h"
@@ -13,7 +15,7 @@ it can.
 class Renderer
 {
 public:
-	Renderer(Camera *camera, ID3D11DeviceContext *context,
+	Renderer(Camera *camera, ID3D11Device* device, ID3D11DeviceContext *context,
 		ID3D11RenderTargetView* backBufferRTV, ID3D11DepthStencilView* depthStencilView);
 	~Renderer();
 
@@ -22,11 +24,21 @@ public:
 	void DrawOneMaterial(GameEntity *entities, int numEntities, float deltaTime, float totalTime);
 	void DrawNoMaterial(GameEntity *entities, int numEntities, float deltaTime, float totalTime);
 
+	void AddVertexShader(std::string name, std::wstring path);
+	void AddPixelShader(std::string name, std::wstring path);
+
 protected:
 	Camera *camera;
 
+	ID3D11Device*			device;
 	ID3D11DeviceContext*	context;
 	ID3D11RenderTargetView* backBufferRTV;
 	ID3D11DepthStencilView* depthStencilView;
+
+	std::map<std::string, SimpleVertexShader*>	VertexShaderDictionary;
+	std::map<std::string, SimplePixelShader*>	PixelShaderDictionary;
+
+	SimpleVertexShader* GetVertexShader(std::string name);
+	SimplePixelShader* GetPixelShader(std::string name);
 };
 

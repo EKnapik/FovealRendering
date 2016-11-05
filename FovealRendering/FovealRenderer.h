@@ -10,7 +10,7 @@
 class FovealRenderer : public Renderer
 {
 public:
-	FovealRenderer(Camera *camera, ID3D11DeviceContext *context, ID3D11Device* device,
+	FovealRenderer(Camera *camera, ID3D11Device* device, ID3D11DeviceContext *context,
 		ID3D11RenderTargetView* backBufferRTV, ID3D11DepthStencilView* depthStencilView, int width, int height);
 	~FovealRenderer();
 

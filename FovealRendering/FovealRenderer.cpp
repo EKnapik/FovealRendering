@@ -2,9 +2,9 @@
 
 
 
-FovealRenderer::FovealRenderer(Camera *camera, ID3D11DeviceContext *context, ID3D11Device* device,
+FovealRenderer::FovealRenderer(Camera *camera, ID3D11Device* device, ID3D11DeviceContext *context,
 	ID3D11RenderTargetView* backBufferRTV, ID3D11DepthStencilView* depthStencilView, int width, int height) :
-	Renderer(camera, context, backBufferRTV, depthStencilView)
+	Renderer(camera, device, context, backBufferRTV, depthStencilView)
 {
 	windowHeight = height;
 	windowWidth = width;
