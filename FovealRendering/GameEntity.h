@@ -55,9 +55,9 @@ public:
 	void WhichPoly(Camera* camera);
 
 	void CreateWorldMat();
-	DirectX::XMFLOAT4X4 GetWorld();
-	DirectX::XMFLOAT4X4 GetWorldClean();
-	DirectX::XMFLOAT4X4 GetRotationMat();
+	DirectX::XMFLOAT4X4* GetWorld();
+	DirectX::XMFLOAT4X4* GetWorldClean();
+	DirectX::XMFLOAT4X4* GetRotationMat();
 
 private:
 	Mesh **meshes; // low, mid and high poly array

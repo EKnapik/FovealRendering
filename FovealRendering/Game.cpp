@@ -50,6 +50,9 @@ Game::~Game()
 
 	delete[] Entity;
 
+	delete[] PointLights;
+	delete[] DirLights;
+
 	// Delete our simple shader objects, which
 	// will clean up their own internal DirectX stuff
 	delete meshMaterial;
@@ -64,7 +67,8 @@ void Game::Init()
 {
 	eyeTracker = new EyeTracker();
 	camera = new Camera();
-	renderEngine = new Renderer(camera, device, context, backBufferRTV, depthStencilView);
+	renderEngine = new FovealRenderer(camera, device, context, backBufferRTV, depthStencilView, width, height);
+	//renderEngine = new Renderer(camera, device, context, backBufferRTV, depthStencilView);
 
 	LoadShaders();
 	CreateMatrices();
@@ -84,6 +88,14 @@ void Game::LoadShaders()
 	renderEngine->AddVertexShader("default", L"VertexShader.cso");
 	renderEngine->AddPixelShader("default", L"PixelShader.cso");
 	renderEngine->AddPixelShader("none", L"NoMaterialShader.cso");
+
+	// Create The Shaders for deffered
+	renderEngine->AddVertexShader("gBuffer", L"gBufferVertexShader.cso");
+	renderEngine->AddPixelShader("gBuffer", L"gBufferPixelShader.cso");
+
+	renderEngine->AddVertexShader("quad", L"quadVertexShader.cso");
+	renderEngine->AddPixelShader("quad", L"quadPixelShader.cso");
+	renderEngine->AddPixelShader("sphereLight", L"sphereLightPixelShader.cso");
 
 	// Adding the Texture stuff here....
 	HRESULT result;
@@ -125,6 +137,9 @@ void Game::CreateMatrices()
 // --------------------------------------------------------
 void Game::CreateBasicGeometry()
 {
+	renderEngine->AddMesh("sphere", new Mesh("Debug/Assets/sphere.obj", device));
+	renderEngine->AddMesh("quad",  new Mesh(device));
+
 	// Create some temporary variables to represent colors
 	// - Not necessary, just makes things more readable
 	XMFLOAT4 red = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
@@ -144,10 +159,10 @@ void Game::CreateBasicGeometry()
 	//this->Meshes[7] = new Mesh("Debug/Assets/armadillo.obj", device);
 
 	// low, mid, high poly respectively
-	Mesh** multiPoly = new Mesh*[3];
-	multiPoly[0] = new Mesh("Debug/Assets/low_bunny.obj", device);
-	multiPoly[1] = new Mesh("Debug/Assets/mid_bunny.obj", device);
-	multiPoly[2] = new Mesh("Debug/Assets/bunny.obj", device);
+	//Mesh** multiPoly = new Mesh*[3];
+	//multiPoly[0] = new Mesh("Debug/Assets/low_bunny.obj", device);
+	//multiPoly[1] = new Mesh("Debug/Assets/mid_bunny.obj", device);
+	//multiPoly[2] = new Mesh("Debug/Assets/bunny.obj", device);
 	
 	/*
 	multiPoly[0] = Meshes[0];
@@ -158,12 +173,28 @@ void Game::CreateBasicGeometry()
 	this->numEntity = 4;
 	this->Entity = new GameEntity[numEntity];
 	//GameEntity(Meshes[0], meshMaterial),
-	this->Entity[0] = GameEntity(multiPoly, noMaterial);
+	this->Entity[0] = GameEntity(Meshes[5], meshMaterial);
 	this->Entity[1] = GameEntity(Meshes[1], meshMaterial);
 	this->Entity[2] = GameEntity(Meshes[2], meshMaterial);
 	this->Entity[3] = GameEntity(Meshes[3], meshMaterial);
 	//this->Entity[4] = GameEntity(Meshes[6], noMaterial);
 	//this->Entity[5] = GameEntity(Meshes[7], noMaterial);
+
+
+
+	// Create Lights
+	this->numPointLights = 1;
+	this->PointLights = new ScenePointLight[numPointLights];
+	this->PointLights[0] = ScenePointLight(XMFLOAT4(0.8, 0.8, 0.1, 1.0),
+							XMFLOAT3(0.0, 0.0, -3.0),
+							5);
+
+	this->numDirLights = 1;
+	this->DirLights = new SceneDirectionalLight[numDirLights];
+	this->DirLights[0] = SceneDirectionalLight(
+		XMFLOAT4(0.1f, 0.1f, 0.1f, 1.0f),
+		XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT3(0, 5, -10));
 }
 
 
@@ -228,7 +259,13 @@ void Game::Update(float deltaTime, float totalTime)
 // --------------------------------------------------------
 void Game::Draw(float deltaTime, float totalTime)
 {
-	renderEngine->DrawOneMaterial(&Entity[modelChoice], 1, deltaTime, totalTime);
+	//renderEngine->DrawOneMaterial(&Entity[modelChoice], 1, deltaTime, totalTime);
+	//*
+	renderEngine->Render(0, 0,
+		&Entity[modelChoice], 1,
+		PointLights, numPointLights,
+		DirLights, numDirLights);
+	//*/
 
 	// Swap back and front
 	swapChain->Present(0, 0);

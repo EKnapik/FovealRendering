@@ -9,8 +9,8 @@
 #include "GameEntity.h"
 #include "Camera.h"
 #include "Lights.h"
-#include "Renderer.h"
 #include "EyeTracker.h"
+#include "FovealRenderer.h"
 
 
 class Game 
@@ -42,7 +42,7 @@ private:
 
 	EyeTracker *eyeTracker;
 	Camera *camera;
-	Renderer *renderEngine;
+	FovealRenderer *renderEngine;
 
 	// Mesh to hold actual geometry data
 	Mesh **Meshes;
@@ -50,6 +50,12 @@ private:
 
 	GameEntity *Entity;
 	int numEntity;
+
+	ScenePointLight* PointLights;
+	int numPointLights;
+
+	SceneDirectionalLight* DirLights;
+	int numDirLights;
 
 	// Wrappers for DirectX shaders to provide simplified functionality
 	Material* meshMaterial;

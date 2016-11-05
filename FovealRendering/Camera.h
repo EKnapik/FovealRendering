@@ -13,13 +13,13 @@ public:
 	Camera();
 	~Camera();
 
-	DirectX::XMFLOAT3 GetDir();
-	DirectX::XMFLOAT3 GetPos() { return pos; }
+	DirectX::XMFLOAT3* GetDir();
+	DirectX::XMFLOAT3* GetPos() { return &pos; }
 	float GetXRot() { return xRot; }
 	float GetYRot() { return yRot; }
 
-	DirectX::XMFLOAT4X4 GetViewMat();
-	DirectX::XMFLOAT4X4 GetProjMat() { return projMat; }
+	DirectX::XMFLOAT4X4* GetViewMat();
+	DirectX::XMFLOAT4X4* GetProjMat() { return &projMat; }
 	void mkProjMat(int width, int height);
 
 	void Forward(float amount);

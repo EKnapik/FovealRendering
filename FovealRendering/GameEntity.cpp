@@ -195,9 +195,9 @@ void GameEntity::WhichPoly(Camera* camera)
 	float midRange;
 
 	// transform object to camera space and use to determine which poly level mesh to show
-	XMFLOAT4X4 world = GetWorld();
+	XMFLOAT4X4 world = *GetWorld();
 	//XMFLOAT4X4 world = camera->GetViewMat();
-	DirectX::XMFLOAT3 camPos = camera->GetPos();
+	DirectX::XMFLOAT3 camPos = *camera->GetPos();
 	XMFLOAT4 pos4x4 = { pos.x, pos.y, pos.z, 1.0f };
 	XMVECTOR vecPos4x4 = XMLoadFloat4(&pos4x4);
 	XMMATRIX worldMatrix = XMLoadFloat4x4(&world);
@@ -257,12 +257,12 @@ void GameEntity::CreateWorldMat()
 	this->dirty = false;
 }
 
-DirectX::XMFLOAT4X4 GameEntity::GetWorld()
+DirectX::XMFLOAT4X4* GameEntity::GetWorld()
 {
-	return this->world;
+	return &this->world;
 }
 
-DirectX::XMFLOAT4X4 GameEntity::GetWorldClean()
+DirectX::XMFLOAT4X4* GameEntity::GetWorldClean()
 {
 	if (dirty) {
 		CreateWorldMat();
@@ -270,13 +270,13 @@ DirectX::XMFLOAT4X4 GameEntity::GetWorldClean()
 	return GetWorld();
 }
 
-DirectX::XMFLOAT4X4 GameEntity::GetRotationMat()
+DirectX::XMFLOAT4X4* GameEntity::GetRotationMat()
 {
 	XMFLOAT4X4 returnMat;
 	XMVECTOR quaternion = XMLoadFloat4(&this->rotQtrn);
 	XMStoreFloat4x4(&returnMat,
 		XMMatrixRotationQuaternion(quaternion));
-	return returnMat;
+	return &returnMat;
 }
 
 

@@ -171,21 +171,6 @@ FovealRenderer::FovealRenderer(Camera *camera, ID3D11Device* device, ID3D11Devic
 	sampleDesc.MaxLOD = D3D11_FLOAT32_MAX;
 	device->CreateSamplerState(&sampleDesc, &simpleSampler);
 
-	// Add required quad mesh
-	quad = new Mesh(device);
-	// Create The Shaders
-	gBufferVertexShader = new SimpleVertexShader(device, context);
-	gBufferVertexShader->LoadShaderFile(L"gBufferVertexShader.cso");
-	gBufferPixelShader = new SimplePixelShader(device, context);
-	gBufferPixelShader->LoadShaderFile(L"gBufferPixelShader.cso");
-
-	quadVertexShader = new SimpleVertexShader(device, context);
-	quadVertexShader->LoadShaderFile(L"quadVertexShader.cso");
-	quadPixelShader = new SimplePixelShader(device, context);
-	quadPixelShader->LoadShaderFile(L"quadPixelShader.cso");
-
-	//AddPixelShader("sphereLight", L"sphereLightPixelShader.cso");
-
 	// Create addative blend state needed for light rendering
 	D3D11_BLEND_DESC bd = {};
 	bd.AlphaToCoverageEnable = false;
@@ -198,19 +183,19 @@ FovealRenderer::FovealRenderer(Camera *camera, ID3D11Device* device, ID3D11Devic
 	bd.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
 	bd.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	bd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	device->CreateBlendState(&bd, &blendState);
+
+	// Create raster state for rendering lights propperly
+	D3D11_RASTERIZER_DESC ligtRastDesc = {};
+	ligtRastDesc.FillMode = D3D11_FILL_SOLID;
+	ligtRastDesc.CullMode = D3D11_CULL_FRONT;
+	ligtRastDesc.DepthClipEnable = false;
+	device->CreateRasterizerState(&ligtRastDesc, &lightRastState);
 }
 
 
 FovealRenderer::~FovealRenderer()
 {
-	delete quad;
-	delete gBufferVertexShader;
-	delete gBufferPixelShader;
-
-	delete quadVertexShader;
-	delete quadPixelShader;
-	delete fovealPixelShader;
-
 	// Albedo
 	AlbedoRTV->Release();
 	AlbedoSRV->Release();
@@ -228,7 +213,9 @@ FovealRenderer::~FovealRenderer()
 }
 
 
-void FovealRenderer::Render(int eyePosX, int eyePosY)
+void FovealRenderer::Render(int eyePosX, int eyePosY, GameEntity* entities, int numEntities,
+	ScenePointLight* pointLights, int numPointLights,
+	SceneDirectionalLight* dirLights, int numDirLights)
 {
 	// Background color (Cornflower Blue)
 	const float clearColor[4] = { 0.4f, 0.6f, 0.75f, 0.0f };
@@ -250,6 +237,12 @@ void FovealRenderer::Render(int eyePosX, int eyePosY)
 	// Render to back buffer
 	// Draw high resolution to buffers
 	// ReRender only foveal area with shading calculations
+
+	gBufferRender(entities, numEntities);
+	context->OMSetRenderTargets(1, &backBufferRTV, 0);
+	pointLightRender(pointLights, numPointLights);
+	context->OMSetRenderTargets(1, &backBufferRTV, depthStencilView);
+	directionalLightRender(dirLights, numDirLights);
 }
 
 
@@ -273,4 +266,163 @@ void FovealRenderer::DrawHighRes()
 void FovealRenderer::DrawFinal()
 {
 
+}
+
+void FovealRenderer::gBufferRender(GameEntity *entities, int numEntities)
+{
+	ID3D11RenderTargetView* RTViews[3] = { AlbedoRTV, NormalRTV, PositionRTV };
+	context->OMSetRenderTargets(3, RTViews, depthStencilView);
+
+	// RENDER NORMALLY NOW
+	DrawMultipleMaterials(entities, numEntities);
+}
+
+
+
+/// Only Render Sphere Lights
+void FovealRenderer::pointLightRender(ScenePointLight* pointLights, int numLights)
+{
+	float factors[4] = { 1,1,1,1 };
+	context->OMSetBlendState(blendState, factors, 0xFFFFFFFF);
+	context->RSSetState(lightRastState);
+
+	SimpleVertexShader* vertexShader = GetVertexShader("default");
+	SimplePixelShader* pixelShader = GetPixelShader("sphereLight");
+	vertexShader->SetShader();
+	pixelShader->SetShader();
+
+	// Send G buffers to pixel shader
+	pixelShader->SetSamplerState("basicSampler", simpleSampler);
+	pixelShader->SetShaderResourceView("gAlbedo", AlbedoSRV);
+	pixelShader->SetShaderResourceView("gNormal", NormalSRV);
+	pixelShader->SetShaderResourceView("gPosition", PositionSRV);
+	// send constant data
+	vertexShader->SetMatrix4x4("view", *camera->GetViewMat());
+	vertexShader->SetMatrix4x4("projection", *camera->GetProjMat());
+
+	pixelShader->SetFloat3("cameraPosition", *camera->GetPos());
+	pixelShader->SetFloat("width", windowWidth);
+	pixelShader->SetFloat("height", windowHeight);
+
+	UINT stride = sizeof(Vertex);
+	UINT offset = 0;
+	Mesh* meshTmp = GetMesh("sphere");
+	ID3D11Buffer* vertTemp = meshTmp->GetVertexBuffer();
+	PointLight light;
+	DirectX::XMFLOAT4X4 world;
+
+	for (int i = 0; i < numLights; i++) {
+		// Send light info to pixel shader
+		light.Color = pointLights[i].Color;
+		light.Position = pointLights[i].Position;
+		// divide by 10 so attenuation looks good
+		light.Radius = pointLights[i].Radius.x;
+		pixelShader->SetData("pointLight", &light, sizeof(PointLight));
+
+		DirectX::XMStoreFloat4x4(&world, (DirectX::XMMatrixScaling(pointLights[i].Radius.x, pointLights[i].Radius.y, pointLights[i].Radius.z)
+			* DirectX::XMMatrixTranslation(pointLights[i].Position.x, pointLights[i].Position.y, pointLights[i].Position.z)));
+		vertexShader->SetMatrix4x4("world", world);
+
+		pixelShader->CopyAllBufferData();
+		vertexShader->CopyAllBufferData();
+
+		context->IASetVertexBuffers(0, 1, &vertTemp, &stride, &offset);
+		context->IASetIndexBuffer(meshTmp->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+		context->DrawIndexed(meshTmp->GetIndexCount(), 0, 0);
+	}
+
+	// RESET STATES
+	pixelShader->SetShaderResourceView("gAlbedo", 0);
+	pixelShader->SetShaderResourceView("gNormal", 0);
+	pixelShader->SetShaderResourceView("gPosition", 0);
+	context->OMSetBlendState(0, factors, 0xFFFFFFFF);
+	context->RSSetState(0);
+	return;
+}
+
+
+void FovealRenderer::directionalLightRender(SceneDirectionalLight* dirLights, int numLights) {
+	float factors[4] = { 1,1,1,1 };
+	context->OMSetBlendState(blendState, factors, 0xFFFFFFFF);
+
+	SimpleVertexShader* vertexShader = GetVertexShader("quad");
+	SimplePixelShader* pixelShader = GetPixelShader("quad");
+	vertexShader->SetShader();
+	pixelShader->SetShader();
+
+	// Send G buffers to pixel shader
+	pixelShader->SetSamplerState("basicSampler", simpleSampler);
+	pixelShader->SetShaderResourceView("gAlbedo", AlbedoSRV);
+	pixelShader->SetShaderResourceView("gNormal", NormalSRV);
+	pixelShader->SetShaderResourceView("gPosition", PositionSRV);
+
+	pixelShader->SetFloat3("cameraPosition", *camera->GetPos());
+	vertexShader->CopyAllBufferData();
+
+	UINT stride = sizeof(Vertex);
+	UINT offset = 0;
+	Mesh* meshTmp = GetMesh("quad");
+	ID3D11Buffer* vertTemp = meshTmp->GetVertexBuffer();
+	DirectionalLight light;
+	for (int i = 0; i < numLights; i++) {
+		// Send light info to pixel shader
+		light.AmbientColor = dirLights[i].AmbientColor;
+		light.DiffuseColor = dirLights[i].DiffuseColor;
+		light.Direction = dirLights[i].Direction;
+		pixelShader->SetData("dirLight", &light, sizeof(DirectionalLight));
+		pixelShader->CopyAllBufferData();
+
+		context->IASetVertexBuffers(0, 1, &vertTemp, &stride, &offset);
+		context->IASetIndexBuffer(meshTmp->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+		context->DrawIndexed(meshTmp->GetIndexCount(), 0, 0);
+	}
+
+	// RESET STATES
+	pixelShader->SetShaderResourceView("gAlbedo", 0);
+	pixelShader->SetShaderResourceView("gNormal", 0);
+	pixelShader->SetShaderResourceView("gPosition", 0);
+	context->OMSetBlendState(0, factors, 0xFFFFFFFF);
+	context->RSSetState(0);
+	return;
+}
+
+
+// There will be no transmissive materials
+void FovealRenderer::DrawMultipleMaterials(GameEntity* gameEntitys, int numEntities)
+{
+	SimpleVertexShader* vertexShader = GetVertexShader("gBuffer");
+	SimplePixelShader* pixelShader = GetPixelShader("gBuffer");
+	vertexShader->SetShader();
+	pixelShader->SetShader();
+
+	if (numEntities == 0) return;
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		Material* material = gameEntitys[i].GetMaterial();
+		
+		// Send texture Info
+		pixelShader->SetSamplerState("basicSampler", this->simpleSampler);
+		pixelShader->SetShaderResourceView("diffuseTexture", material->GetTexture());
+		//pixelShader->SetShaderResourceView("NormalMap", material->GetNormMap());
+
+		// Send Geometry
+		vertexShader->SetMatrix4x4("view", *camera->GetViewMat());
+		vertexShader->SetMatrix4x4("projection", *camera->GetProjMat());
+		pixelShader->SetFloat3("cameraPosition", *camera->GetPos());
+
+
+		UINT stride = sizeof(Vertex);
+		UINT offset = 0;
+		Mesh* meshTmp;
+		vertexShader->SetMatrix4x4("world", *gameEntitys[i].GetWorldClean());
+		vertexShader->CopyAllBufferData();
+		pixelShader->CopyAllBufferData();
+
+		meshTmp = gameEntitys[i].GetMesh();
+		ID3D11Buffer* vertTemp = meshTmp->GetVertexBuffer();
+		context->IASetVertexBuffers(0, 1, &vertTemp, &stride, &offset);
+		context->IASetIndexBuffer(meshTmp->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+		context->DrawIndexed(meshTmp->GetIndexCount(), 0, 0);
+	}
 }

@@ -17,12 +17,16 @@ class Renderer
 public:
 	Renderer(Camera *camera, ID3D11Device* device, ID3D11DeviceContext *context,
 		ID3D11RenderTargetView* backBufferRTV, ID3D11DepthStencilView* depthStencilView);
-	~Renderer();
+	virtual ~Renderer();
 
-	void Render(float deltaTime, float totalTime);
-	void DrawFoveated(GameEntity *entities, int numEntities);
+	// TODO implement this function
+	void DrawFoveated(GameEntity *entities, int numEntities) {}
 	void DrawOneMaterial(GameEntity *entities, int numEntities, float deltaTime, float totalTime);
 	void DrawNoMaterial(GameEntity *entities, int numEntities, float deltaTime, float totalTime);
+
+	void AddMesh(std::string name, Mesh* mesh);
+	void AddMesh(std::string name, std::string path);
+	Mesh* GetMesh(std::string name);
 
 	void AddVertexShader(std::string name, std::wstring path);
 	void AddPixelShader(std::string name, std::wstring path);
@@ -35,6 +39,7 @@ protected:
 	ID3D11RenderTargetView* backBufferRTV;
 	ID3D11DepthStencilView* depthStencilView;
 
+	std::map<std::string, Mesh*>				MeshDictionary;
 	std::map<std::string, SimpleVertexShader*>	VertexShaderDictionary;
 	std::map<std::string, SimplePixelShader*>	PixelShaderDictionary;
 
