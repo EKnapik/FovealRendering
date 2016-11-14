@@ -13,8 +13,8 @@ cbuffer externalData : register(b0)
 	matrix world;
 	matrix view;
 	matrix projection;
-	int	   posX;  // 
-	int    posY;  // 
+	float  offsetX;  // 
+	float  offsetY;  // 
 };
 
 // Struct representing the data we're sending down the pipeline
@@ -35,7 +35,11 @@ VertexToPixel main( VertexShaderInput input )
 	VertexToPixel output = (VertexToPixel)0;
 	// This should currently be directly in front of the camera
 	output.position = mul(float4(input.position, 1.0f), worldViewProj);
-	// Pushing this off slightly to the left
+	// Addjusting mask by offset
+	output.position.x = output.position.x + offsetX;
+	output.position.y = output.position.y + offsetY;
+
+
 	output.uv = input.uv;
 
 	return output;

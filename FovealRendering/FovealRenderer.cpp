@@ -386,6 +386,12 @@ void FovealRenderer::gBufferRender(int eyePosX, int eyePosY, GameEntity *entitie
 
 // Don't need a pixel shader
 void FovealRenderer::DrawMask(int eyePosX, int eyePosY) {
+	// Compute amount to offset center mask
+	// inverting Y because going down is positive y for DirectX
+	const float FovealOffset = 4.0;
+	float offsetX = ((eyePosX * 2.0) - windowWidth) / windowWidth * FovealOffset;
+	float offsetY = -((eyePosY * 2.0) - windowHeight) / windowHeight * FovealOffset;
+
 	SimpleVertexShader* vertexShader = GetVertexShader("fovealMask");
 	context->PSSetShader(0, 0, 0); // No pixel shader needed
 	vertexShader->SetShader();
@@ -393,8 +399,8 @@ void FovealRenderer::DrawMask(int eyePosX, int eyePosY) {
 	// send constant data
 	vertexShader->SetMatrix4x4("view", *camera->GetViewMat());
 	vertexShader->SetMatrix4x4("projection", *camera->GetProjMat());
-	vertexShader->SetInt("posX", eyePosX);
-	vertexShader->SetInt("posY", eyePosY);
+	vertexShader->SetFloat("offsetX", offsetX);
+	vertexShader->SetFloat("offsetY", offsetY);
 
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
@@ -403,7 +409,10 @@ void FovealRenderer::DrawMask(int eyePosX, int eyePosY) {
 	DirectX::XMFLOAT4X4 world;
 	DirectX::XMFLOAT3 dir = *camera->GetDir();
 	DirectX::XMFLOAT3 pos = *camera->GetPos();
-	DirectX::XMStoreFloat4x4(&world, DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(pos.x + (dir.x*3), pos.y + (dir.y*3), pos.z + (dir.z*3))));
+	DirectX::XMStoreFloat4x4(&world, DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(
+		pos.x + (dir.x*FovealOffset), 
+		pos.y + (dir.y*FovealOffset),
+		pos.z + (dir.z*FovealOffset))));
 	vertexShader->SetMatrix4x4("world", world);
 
 	vertexShader->CopyAllBufferData();

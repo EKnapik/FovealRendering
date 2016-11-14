@@ -262,8 +262,8 @@ void Game::Update(float deltaTime, float totalTime)
 void Game::Draw(float deltaTime, float totalTime)
 {
 	//renderEngine->DrawOneMaterial(&Entity[modelChoice], 1, deltaTime, totalTime);
-	//*
-	renderEngine->Render(0, 0,
+	//* 
+	renderEngine->Render(prevMousePos.x, prevMousePos.y,
 		&Entity[modelChoice], 1,
 		PointLights, numPointLights,
 		DirLights, numDirLights);
