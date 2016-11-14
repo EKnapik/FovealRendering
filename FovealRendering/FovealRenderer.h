@@ -23,7 +23,8 @@ private:
 	void DrawHighRes();
 	void DrawFinal();
 
-	void gBufferRender(GameEntity *entities, int numEntities);
+	void gBufferRender(int eyePosX, int eyePosY, GameEntity *entities, int numEntities);
+	void DrawMask(int eyePosX, int eyePosY);
 	void pointLightRender(ScenePointLight* pointLights, int numLights);
 	void directionalLightRender(SceneDirectionalLight* dirLights, int numLights);
 	void DrawMultipleMaterials(GameEntity* gameEntitys, int numEntities);
@@ -46,5 +47,7 @@ private:
 	ID3D11SamplerState* simpleSampler;
 	ID3D11BlendState* blendState;
 	ID3D11RasterizerState* lightRastState;
+	ID3D11DepthStencilState* writeMask;
+	ID3D11DepthStencilState* readMask;
 };
 

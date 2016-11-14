@@ -38,7 +38,7 @@ float4 main(VertexToPixel input) : SV_TARGET
 
 	// Check for clip
 	// CLIPPING MIGHT NOT BE THE BEST CHOICE BUT IT IS A CHOICE
-	clip(surfaceColor.a + -0.01);
+	//clip(surfaceColor.a + -0.01);
 
 	// NOT INVERTING THE DIRECTION TO THE LIGHT
 	float3 dirToLight = normalize(dirLight.Direction);

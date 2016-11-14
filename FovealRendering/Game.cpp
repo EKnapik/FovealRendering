@@ -93,6 +93,8 @@ void Game::LoadShaders()
 	renderEngine->AddVertexShader("gBuffer", L"gBufferVertexShader.cso");
 	renderEngine->AddPixelShader("gBuffer", L"gBufferPixelShader.cso");
 
+	renderEngine->AddVertexShader("fovealMask", L"fovealMask.cso");
+
 	renderEngine->AddVertexShader("quad", L"quadVertexShader.cso");
 	renderEngine->AddPixelShader("quad", L"quadPixelShader.cso");
 	renderEngine->AddPixelShader("sphereLight", L"sphereLightPixelShader.cso");
@@ -186,8 +188,8 @@ void Game::CreateBasicGeometry()
 	this->numPointLights = 1;
 	this->PointLights = new ScenePointLight[numPointLights];
 	this->PointLights[0] = ScenePointLight(XMFLOAT4(0.8, 0.8, 0.1, 1.0),
-							XMFLOAT3(0.0, 0.0, -3.0),
-							5);
+							XMFLOAT3(0.0, 0.0, 0.0),
+							3);
 
 	this->numDirLights = 1;
 	this->DirLights = new SceneDirectionalLight[numDirLights];

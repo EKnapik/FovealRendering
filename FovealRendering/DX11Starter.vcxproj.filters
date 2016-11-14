@@ -25,6 +25,9 @@
     <FxCompile Include="sphereLightPixelShader.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="fovealMask.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
