@@ -229,10 +229,10 @@ FovealRenderer::FovealRenderer(Camera *camera, ID3D11Device* device, ID3D11Devic
 	//Depth stencil desc for re-drawing the main scene, using the stencil as a mask
 	D3D11_DEPTH_STENCIL_DESC dsDescSecondpass;
 
-	// WRITE EQUAL SO IT WILL REPLACE THE PREVIOUS ONES WITHOUT ALTERING THE BUFFER
-	dsDescSecondpass.DepthEnable = false;
+
+	dsDescSecondpass.DepthEnable = true;
 	dsDescSecondpass.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	dsDescSecondpass.DepthFunc = D3D11_COMPARISON_EQUAL;
+	dsDescSecondpass.DepthFunc = D3D11_COMPARISON_LESS;
 
 	dsDescSecondpass.StencilEnable = true;
 	dsDescSecondpass.StencilReadMask = 0xFF;
@@ -342,7 +342,7 @@ void FovealRenderer::DrawHighRes()
 	DirectionalLight light;
 	// Send light info to pixel shader
 	light.AmbientColor = DirectX::XMFLOAT4(1, 0, 1, 1);
-	light.DiffuseColor = DirectX::XMFLOAT4(0, 0, 0, 1);
+	light.DiffuseColor = DirectX::XMFLOAT4(0, 1, 0, 1);
 	light.Direction = DirectX::XMFLOAT3(0, 0, 0);
 	pixelShader->SetData("dirLight", &light, sizeof(DirectionalLight));
 	pixelShader->CopyAllBufferData();
@@ -376,8 +376,11 @@ void FovealRenderer::gBufferRender(int eyePosX, int eyePosY, GameEntity *entitie
 	context->OMSetDepthStencilState(writeMask, 0);
 	// Render masking at position
 	DrawMask(eyePosX, eyePosY);
+
 	// Setup read Mask and rerender with high res geometry
 	context->OMSetDepthStencilState(readMask, 1);
+	context->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	
 	DrawHighRes();
 	// Reset depth stencil
 	context->OMSetDepthStencilState(0, 0);

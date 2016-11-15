@@ -1,8 +1,8 @@
 ﻿  FovealRenderer.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(392): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(393): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(448): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(449): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(395): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(396): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(451): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(452): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.exe
   DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.pdb (Full PDB)
   ..\tobii_lib\x86\Tobii.EyeX.Client.dll
