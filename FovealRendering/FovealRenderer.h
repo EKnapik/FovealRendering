@@ -47,6 +47,7 @@ private:
 	ID3D11SamplerState* simpleSampler;
 	ID3D11BlendState* blendState;
 	ID3D11RasterizerState* lightRastState;
+	ID3D11DepthStencilState* lightDepthState;
 	ID3D11DepthStencilState* writeMask;
 	ID3D11DepthStencilState* readMask;
 };

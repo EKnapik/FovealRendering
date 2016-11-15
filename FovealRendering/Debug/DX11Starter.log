@@ -1,8 +1,15 @@
-﻿  FovealRenderer.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(395): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(396): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(451): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(452): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+﻿  Main.cpp
+  Game.cpp
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(190): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(213): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(322): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(323): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  FovealRenderer.cpp
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(405): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(406): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(461): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(462): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Generating Code...
   DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.exe
   DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.pdb (Full PDB)
   ..\tobii_lib\x86\Tobii.EyeX.Client.dll
