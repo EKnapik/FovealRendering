@@ -192,12 +192,6 @@ FovealRenderer::FovealRenderer(Camera *camera, ID3D11Device* device, ID3D11Devic
 	ligtRastDesc.DepthClipEnable = false;
 	device->CreateRasterizerState(&ligtRastDesc, &lightRastState);
 
-	D3D11_DEPTH_STENCIL_DESC depthDesc = {};
-	depthDesc.DepthEnable = true;
-	depthDesc.DepthFunc = D3D11_COMPARISON_LESS;
-	depthDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-	device->CreateDepthStencilState(&depthDesc, &lightDepthState);
-
 	// create stencil write
 	// Depth stencil desc for decal drawing
 	// Create depth stencil state corresponding to step one of the article.
@@ -279,7 +273,6 @@ FovealRenderer::~FovealRenderer()
 	simpleSampler->Release();
 	blendState->Release();
 	lightRastState->Release();
-	lightDepthState->Release();
 	writeMask->Release();
 	readMask->Release();
 }
@@ -312,11 +305,8 @@ void FovealRenderer::Render(int eyePosX, int eyePosY, GameEntity* entities, int 
 
 	gBufferRender(eyePosX, eyePosY, entities, numEntities);
 
-	context->OMSetRenderTargets(1, &backBufferRTV, depthStencilView);
-	context->OMSetDepthStencilState(lightDepthState, 0);
-
-	pointLightRender(pointLights, numPointLights);
 	context->OMSetRenderTargets(1, &backBufferRTV, 0);
+	pointLightRender(pointLights, numPointLights);
 	directionalLightRender(dirLights, numDirLights);
 
 	context->OMSetDepthStencilState(0, 0);

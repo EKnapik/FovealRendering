@@ -189,7 +189,7 @@ void Game::CreateBasicGeometry()
 	this->PointLights = new ScenePointLight[numPointLights];
 	this->PointLights[0] = ScenePointLight(XMFLOAT4(0.8, 0.8, 0.1, 1.0),
 							XMFLOAT3(0.0, 0.0, 0.0),
-							3);
+							5);
 
 	this->numDirLights = 1;
 	this->DirLights = new SceneDirectionalLight[numDirLights];
