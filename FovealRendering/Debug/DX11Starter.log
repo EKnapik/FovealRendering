@@ -1,22 +1,8 @@
-﻿  Renderer.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(63): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(65): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(111): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\renderer.cpp(113): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  Main.cpp
-  GameEntity.cpp
-  Game.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(214): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(237): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(346): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(347): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  FovealRenderer.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(383): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(384): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(439): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(440): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Generating Code...
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\gameentity.cpp(270): warning C4172: returning address of local variable or temporary: returnMat
+﻿  FovealRenderer.cpp
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(387): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(388): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(443): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(444): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.exe
   DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.pdb (Full PDB)
   ..\tobii_lib\x86\Tobii.EyeX.Client.dll

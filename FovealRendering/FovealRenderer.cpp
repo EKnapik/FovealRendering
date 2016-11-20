@@ -320,35 +320,39 @@ void FovealRenderer::DrawLowRes(GameEntity *entities, int numEntities)
 // SETTING THIS AS A TEST
 void FovealRenderer::DrawHighRes(GameEntity *entities, int numEntities)
 {
-	SimpleVertexShader* vertexShader = GetVertexShader("quad");
-	SimplePixelShader* pixelShader = GetPixelShader("quad");
+	SimpleVertexShader* vertexShader = GetVertexShader("gBuffer");
+	SimplePixelShader* pixelShader = GetPixelShader("gBuffer");
 	vertexShader->SetShader();
 	pixelShader->SetShader();
 
-	pixelShader->SetFloat3("cameraPosition", *camera->GetPos());
-	vertexShader->CopyAllBufferData();
+	if (numEntities == 0) return;
 
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
-	Mesh* meshTmp = GetMesh("quad");
-	ID3D11Buffer* vertTemp = meshTmp->GetVertexBuffer();
-	DirectionalLight light;
-	// Send light info to pixel shader
-	light.AmbientColor = DirectX::XMFLOAT4(1, 0, 1, 1);
-	light.DiffuseColor = DirectX::XMFLOAT4(0, 1, 0, 1);
-	light.Direction = DirectX::XMFLOAT3(0, 0, 0);
-	pixelShader->SetData("dirLight", &light, sizeof(DirectionalLight));
-	pixelShader->CopyAllBufferData();
+	for (int i = 0; i < numEntities; i++)
+	{
+		Material* material = entities[i].GetMaterial();
+		// Send texture Info
+		pixelShader->SetSamplerState("basicSampler", this->simpleSampler);
+		pixelShader->SetShaderResourceView("diffuseTexture", material->GetTexture());
+		//pixelShader->SetShaderResourceView("NormalMap", material->GetNormMap());
 
-	context->IASetVertexBuffers(0, 1, &vertTemp, &stride, &offset);
-	context->IASetIndexBuffer(meshTmp->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
-	context->DrawIndexed(meshTmp->GetIndexCount(), 0, 0);
+		// Send Geometry
+		vertexShader->SetMatrix4x4("view", *camera->GetViewMat());
+		vertexShader->SetMatrix4x4("projection", *camera->GetProjMat());
+		pixelShader->SetFloat3("cameraPosition", *camera->GetPos());
 
-	// RESET STATES
-	pixelShader->SetShaderResourceView("gAlbedo", 0);
-	pixelShader->SetShaderResourceView("gNormal", 0);
-	pixelShader->SetShaderResourceView("gPosition", 0);
-	return;
+		UINT stride = sizeof(Vertex);
+		UINT offset = 0;
+		Mesh* meshTmp;
+		vertexShader->SetMatrix4x4("world", *entities[i].GetWorldClean());
+		vertexShader->CopyAllBufferData();
+		pixelShader->CopyAllBufferData();
+
+		meshTmp = entities[i].GetHighPoly();
+		ID3D11Buffer* vertTemp = meshTmp->GetVertexBuffer();
+		context->IASetVertexBuffers(0, 1, &vertTemp, &stride, &offset);
+		context->IASetIndexBuffer(meshTmp->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+		context->DrawIndexed(meshTmp->GetIndexCount(), 0, 0);
+	}
 }
 
 
