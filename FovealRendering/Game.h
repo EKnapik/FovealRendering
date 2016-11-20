@@ -48,6 +48,8 @@ private:
 	Mesh **Meshes;
 	int numMeshes;
 
+	Mesh** multiPoly;
+
 	GameEntity *Entity;
 	int numEntity;
 

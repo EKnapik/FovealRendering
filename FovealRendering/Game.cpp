@@ -48,6 +48,11 @@ Game::~Game()
 	}
 	delete Meshes;
 
+	for (int i = 0; i < 3; i++) {
+		delete multiPoly[i];
+	}
+	delete multiPoly;
+
 	delete[] Entity;
 
 	delete[] PointLights;
@@ -161,10 +166,10 @@ void Game::CreateBasicGeometry()
 	//this->Meshes[7] = new Mesh("Debug/Assets/armadillo.obj", device);
 
 	// low, mid, high poly respectively
-	//Mesh** multiPoly = new Mesh*[3];
-	//multiPoly[0] = new Mesh("Debug/Assets/low_bunny.obj", device);
-	//multiPoly[1] = new Mesh("Debug/Assets/mid_bunny.obj", device);
-	//multiPoly[2] = new Mesh("Debug/Assets/bunny.obj", device);
+	this->multiPoly = new Mesh*[3];
+	multiPoly[0] = new Mesh("Debug/Assets/low_bunny.obj", device);
+	multiPoly[1] = new Mesh("Debug/Assets/mid_bunny.obj", device);
+	multiPoly[2] = new Mesh("Debug/Assets/bunny.obj", device);
 	
 	/*
 	multiPoly[0] = Meshes[0];
@@ -172,23 +177,42 @@ void Game::CreateBasicGeometry()
 	multiPoly[2] = Meshes[4];
 	*/
 	// Let's try not to follow pointers
-	this->numEntity = 4;
+	this->numEntity = 6;
 	this->Entity = new GameEntity[numEntity];
-	//GameEntity(Meshes[0], meshMaterial),
-	this->Entity[0] = GameEntity(Meshes[5], meshMaterial);
+
+	// floor
+	this->Entity[0] = GameEntity(Meshes[1], meshMaterial);
+	this->Entity[0].ScaleTo(XMFLOAT3(50, 1, 50));
+	this->Entity[0].TranslateTo(XMFLOAT3(0, -1, 0));
+
+	// wall 1
 	this->Entity[1] = GameEntity(Meshes[1], meshMaterial);
-	this->Entity[2] = GameEntity(Meshes[2], meshMaterial);
-	this->Entity[3] = GameEntity(Meshes[3], meshMaterial);
-	//this->Entity[4] = GameEntity(Meshes[6], noMaterial);
-	//this->Entity[5] = GameEntity(Meshes[7], noMaterial);
+	this->Entity[1].ScaleTo(XMFLOAT3(50, 25, 1));
+	this->Entity[1].TranslateTo(XMFLOAT3(0, 10, 25));
+	// wall 2
+	this->Entity[2] = GameEntity(Meshes[1], meshMaterial);
+	this->Entity[2].ScaleTo(XMFLOAT3(50, 25, 1));
+	this->Entity[2].TranslateTo(XMFLOAT3(0, 10, -25));
+	
+	// wall 3
+	this->Entity[3] = GameEntity(Meshes[1], meshMaterial);
+	this->Entity[3].ScaleTo(XMFLOAT3(1, 25, 50));
+	this->Entity[3].TranslateTo(XMFLOAT3(-25, 10, 0));
+	// wall 4
+	this->Entity[4] = GameEntity(Meshes[1], meshMaterial);
+	this->Entity[4].ScaleTo(XMFLOAT3(1, 25, 50));
+	this->Entity[4].TranslateTo(XMFLOAT3(25, 10, 0));
 
-
+	// bunny model
+	this->Entity[5] = GameEntity(multiPoly, noMaterial);
+	this->Entity[5].ScaleTo(XMFLOAT3(2, 2, 2));
+	this->Entity[5].TranslateTo(XMFLOAT3(0, 0, 0));
 
 	// Create Lights
 	this->numPointLights = 1;
 	this->PointLights = new ScenePointLight[numPointLights];
 	this->PointLights[0] = ScenePointLight(XMFLOAT4(0.8, 0.8, 0.1, 1.0),
-							XMFLOAT3(0.0, 0.0, 0.0),
+							XMFLOAT3(0.0, 1.0, 2.0),
 							5);
 
 	this->numDirLights = 1;
@@ -264,7 +288,7 @@ void Game::Draw(float deltaTime, float totalTime)
 	//renderEngine->DrawOneMaterial(&Entity[modelChoice], 1, deltaTime, totalTime);
 	//* 
 	renderEngine->Render(prevMousePos.x, prevMousePos.y,
-		&Entity[modelChoice], 1,
+		Entity, numEntity,
 		PointLights, numPointLights,
 		DirLights, numDirLights);
 	//*/

@@ -7,7 +7,7 @@ GameEntity::GameEntity(Mesh **meshes, Material* material)
 {
 	this->detailed = true;
 	this->meshes = meshes;
-	this->mesh = meshes[0];//WhichPoly();
+	this->mesh = meshes[0];
 	this->material = material;
 	this->dirty = true;
 	this->pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -20,7 +20,7 @@ GameEntity::GameEntity(Mesh **meshes, DirectX::XMFLOAT3 pos, Material* material)
 {
 	this->detailed = true;
 	this->meshes = meshes;
-	this->mesh = meshes[0];//WhichPoly();
+	this->mesh = meshes[0];
 	this->material = material;
 	this->dirty = true;
 	this->pos = pos;
@@ -34,7 +34,7 @@ GameEntity::GameEntity(Mesh* mesh, Material* material)
 {
 	this->detailed = false;
 	this->mesh = mesh;
-	this->meshes = new Mesh*[1]{mesh};
+	this->meshes = nullptr;
 	this->material = material;
 	this->dirty = true;
 	this->pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -47,7 +47,7 @@ GameEntity::GameEntity(Mesh* mesh, DirectX::XMFLOAT3 pos, Material* material)
 {
 	this->detailed = false;
 	this->mesh = mesh;
-	this->meshes = new Mesh*[1]{mesh};
+	this->meshes = nullptr;
 	this->material = material;
 	this->dirty = true;
 	this->pos = pos;
@@ -58,6 +58,15 @@ GameEntity::GameEntity(Mesh* mesh, DirectX::XMFLOAT3 pos, Material* material)
 
 GameEntity::~GameEntity()
 {
+}
+
+Mesh * GameEntity::GetHighPoly()
+{
+	if (detailed)
+	{
+		return meshes[2];
+	}
+	return GetMesh();
 }
 
 void GameEntity::SetMesh(Mesh* mesh) {
@@ -224,24 +233,6 @@ void GameEntity::WhichPoly(Camera* camera)
 	{
 		this->mesh = meshes[2];
 	}
-
-	/*
-	// Stupid method for testing rn ~~~~
-	float dif = pos.z - camPos.z;
-	lowRange = 17.0f;
-	midRange = 10.0f;
-	if (dif > lowRange ) // low poly
-	{
-		this->mesh = meshes[0];
-	}
-	else if (dif > midRange && dif <= lowRange ) // mid poly
-	{
-		this->mesh = meshes[1];
-	}
-	else // high poly
-	{
-		this->mesh = meshes[2];
-	}*/
 	
 }
 

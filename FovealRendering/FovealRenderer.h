@@ -19,9 +19,8 @@ public:
 		SceneDirectionalLight* dirLights, int numDirLights);
 
 private:
-	void DrawLowRes();
-	void DrawHighRes();
-	void DrawFinal();
+	void DrawLowRes(GameEntity *entities, int numEntities);
+	void DrawHighRes(GameEntity *entities, int numEntities);
 
 	void gBufferRender(int eyePosX, int eyePosY, GameEntity *entities, int numEntities);
 	void DrawMask(int eyePosX, int eyePosY);

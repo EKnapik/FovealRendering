@@ -308,24 +308,17 @@ void FovealRenderer::Render(int eyePosX, int eyePosY, GameEntity* entities, int 
 	context->OMSetRenderTargets(1, &backBufferRTV, 0);
 	pointLightRender(pointLights, numPointLights);
 	directionalLightRender(dirLights, numDirLights);
-
-	context->OMSetDepthStencilState(0, 0);
 }
 
 
-void FovealRenderer::DrawLowRes()
+void FovealRenderer::DrawLowRes(GameEntity *entities, int numEntities)
 {
-	ID3D11RenderTargetView* RTViews[3] = { AlbedoRTV, NormalRTV, PositionRTV };
-
-	context->OMSetRenderTargets(3, RTViews, depthStencilView);
-
-	// RENDER NORMALLY NOW
-	// DrawOneMaterial();
+	DrawMultipleMaterials(entities, numEntities);
 }
 
 
 // SETTING THIS AS A TEST
-void FovealRenderer::DrawHighRes()
+void FovealRenderer::DrawHighRes(GameEntity *entities, int numEntities)
 {
 	SimpleVertexShader* vertexShader = GetVertexShader("quad");
 	SimplePixelShader* pixelShader = GetPixelShader("quad");
@@ -359,18 +352,13 @@ void FovealRenderer::DrawHighRes()
 }
 
 
-void FovealRenderer::DrawFinal()
-{
-
-}
-
 void FovealRenderer::gBufferRender(int eyePosX, int eyePosY, GameEntity *entities, int numEntities)
 {
 	ID3D11RenderTargetView* RTViews[3] = { AlbedoRTV, NormalRTV, PositionRTV };
 	context->OMSetRenderTargets(3, RTViews, depthStencilView);
 
 	// RENDER NORMALLY NOW ALL Low Res
-	DrawMultipleMaterials(entities, numEntities);
+	DrawLowRes(entities, numEntities);
 
 	// Setup Write Mask
 	context->OMSetDepthStencilState(writeMask, 0);
@@ -381,7 +369,7 @@ void FovealRenderer::gBufferRender(int eyePosX, int eyePosY, GameEntity *entitie
 	context->OMSetDepthStencilState(readMask, 1);
 	context->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	
-	DrawHighRes();
+	DrawHighRes(entities, numEntities);
 	// Reset depth stencil
 	context->OMSetDepthStencilState(0, 0);
 }
