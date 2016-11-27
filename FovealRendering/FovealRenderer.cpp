@@ -278,9 +278,9 @@ FovealRenderer::~FovealRenderer()
 }
 
 
-void FovealRenderer::Render(int eyePosX, int eyePosY, GameEntity* entities, int numEntities,
+void FovealRenderer::FovealRender(int eyePosX, int eyePosY, GameEntity* entities, int numEntities,
 	ScenePointLight* pointLights, int numPointLights,
-	SceneDirectionalLight* dirLights, int numDirLights)
+	SceneDirectionalLight* dirLights, int numDirLights, bool foveal)
 {
 	// Background color (Cornflower Blue)
 	const float clearColor[4] = { 0.4f, 0.6f, 0.75f, 0.0f };
@@ -298,12 +298,7 @@ void FovealRenderer::Render(int eyePosX, int eyePosY, GameEntity* entities, int 
 		1.0f,
 		0);
 
-	// Draw low resolution to gBuffer
-	// Stencil draw sphere, cone or cylinder
-	// Draw high resolution to buffers 
-	// ReRender only foveal area with shading calculations
-
-	gBufferRender(eyePosX, eyePosY, entities, numEntities);
+	gBufferRender(eyePosX, eyePosY, entities, numEntities, foveal);
 
 	context->OMSetRenderTargets(1, &backBufferRTV, 0);
 	pointLightRender(pointLights, numPointLights);
@@ -356,22 +351,24 @@ void FovealRenderer::DrawHighRes(GameEntity *entities, int numEntities)
 }
 
 
-void FovealRenderer::gBufferRender(int eyePosX, int eyePosY, GameEntity *entities, int numEntities)
+void FovealRenderer::gBufferRender(int eyePosX, int eyePosY, GameEntity *entities, int numEntities, bool foveal)
 {
 	ID3D11RenderTargetView* RTViews[3] = { AlbedoRTV, NormalRTV, PositionRTV };
 	context->OMSetRenderTargets(3, RTViews, depthStencilView);
+	if (foveal)
+	{
+		// RENDER NORMALLY NOW ALL Low Res
+		DrawLowRes(entities, numEntities);
 
-	// RENDER NORMALLY NOW ALL Low Res
-	DrawLowRes(entities, numEntities);
+		// Setup Write Mask
+		context->OMSetDepthStencilState(writeMask, 0);
+		// Render masking at position
+		DrawMask(eyePosX, eyePosY);
 
-	// Setup Write Mask
-	context->OMSetDepthStencilState(writeMask, 0);
-	// Render masking at position
-	DrawMask(eyePosX, eyePosY);
-
-	// Setup read Mask and rerender with high res geometry
-	context->OMSetDepthStencilState(readMask, 1);
-	context->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+		// Setup read Mask and rerender with high res geometry
+		context->OMSetDepthStencilState(readMask, 1);
+		context->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	}
 	
 	DrawHighRes(entities, numEntities);
 	// Reset depth stencil

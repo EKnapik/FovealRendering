@@ -21,7 +21,6 @@ Game::Game(HINSTANCE hInstance)
 		720,			   // Height of the window's client area
 		true)			   // Show extra stats (fps) in title bar?
 {
-	Meshes = 0;
 	// Initialize fields
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -43,10 +42,6 @@ Game::~Game()
 	delete renderEngine;
 	// Release any (and all!) DirectX objects within Mesh
 	// we've made in the Game class
-	for (int i = 0; i < numMeshes; i++) {
-		delete Meshes[i];
-	}
-	delete Meshes;
 
 	for (int i = 0; i < 3; i++) {
 		delete multiPoly[i];
@@ -60,8 +55,11 @@ Game::~Game()
 
 	// Delete our simple shader objects, which
 	// will clean up their own internal DirectX stuff
+	tmpSampler->Release();
 	delete meshMaterial;
 	delete noMaterial;
+	delete floorMaterial;
+	delete wallMaterial;
 }
 
 // --------------------------------------------------------
@@ -72,6 +70,7 @@ void Game::Init()
 {
 	eyeTracker = new EyeTracker();
 	camera = new Camera();
+	camera->SetPos(XMFLOAT3(0, 3, -10));
 	renderEngine = new FovealRenderer(camera, device, context, backBufferRTV, depthStencilView, width, height);
 	//renderEngine = new Renderer(camera, device, context, backBufferRTV, depthStencilView);
 
@@ -107,11 +106,8 @@ void Game::LoadShaders()
 	// Adding the Texture stuff here....
 	HRESULT result;
 	ID3D11ShaderResourceView* tmpSRV;
-	ID3D11ShaderResourceView* tmpNormSRV;
-	ID3D11SamplerState* tmpSampler;
 
-	result = CreateWICTextureFromFile(device, context, L"Debug/Textures/rock.jpg", 0, &tmpSRV);
-	result = CreateWICTextureFromFile(device, context, L"Debug/Textures/rock_norm.jpg", 0, &tmpNormSRV);
+	result = CreateWICTextureFromFile(device, context, L"Debug/Textures/marble.jpg", 0, &tmpSRV);
 	D3D11_SAMPLER_DESC samplerDesc = {};
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -122,8 +118,14 @@ void Game::LoadShaders()
 	device->CreateSamplerState(&samplerDesc, &tmpSampler);
 
 	// Create material with texture stuff
-	meshMaterial = new Material(tmpSampler, tmpSRV, tmpNormSRV);
+	meshMaterial = new Material(tmpSampler, tmpSRV);
 	noMaterial = new Material("none");
+
+	result = CreateWICTextureFromFile(device, context, L"Debug/Textures/floorTile.jpg", 0, &tmpSRV);
+	floorMaterial = new Material(tmpSampler, tmpSRV);
+
+	result = CreateWICTextureFromFile(device, context, L"Debug/Textures/wall.jpg", 0, &tmpSRV);
+	wallMaterial = new Material(tmpSampler, tmpSRV);
 }
 
 
@@ -153,15 +155,8 @@ void Game::CreateBasicGeometry()
 	XMFLOAT4 green = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT4 blue = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 
-	this->numMeshes = 6;
-	// If we are worried about performance our mesh objects shouldn't follow pointers
-	this->Meshes = new Mesh*[numMeshes];
-	this->Meshes[0] = new Mesh("Debug/Assets/cone.obj", device);
-	this->Meshes[1] = new Mesh("Debug/Assets/cube.obj", device);
-	this->Meshes[2] = new Mesh("Debug/Assets/cylinder.obj", device);
-	this->Meshes[3] = new Mesh("Debug/Assets/helix.obj", device);
-	this->Meshes[4] = new Mesh("Debug/Assets/sphere.obj", device);
-	this->Meshes[5] = new Mesh("Debug/Assets/torus.obj", device);
+
+	renderEngine->AddMesh("cube", new Mesh("Debug/Assets/cube.obj", device));
 	//this->Meshes[6] = new Mesh("Debug/Assets/bunny.obj", device);
 	//this->Meshes[7] = new Mesh("Debug/Assets/armadillo.obj", device);
 
@@ -177,36 +172,40 @@ void Game::CreateBasicGeometry()
 	multiPoly[2] = Meshes[4];
 	*/
 	// Let's try not to follow pointers
-	this->numEntity = 6;
+	this->numEntity = 7;
 	this->Entity = new GameEntity[numEntity];
 
 	// floor
-	this->Entity[0] = GameEntity(Meshes[1], meshMaterial);
+	this->Entity[0] = GameEntity(renderEngine->GetMesh("cube"), floorMaterial);
 	this->Entity[0].ScaleTo(XMFLOAT3(50, 1, 50));
 	this->Entity[0].TranslateTo(XMFLOAT3(0, -1, 0));
 
 	// wall 1
-	this->Entity[1] = GameEntity(Meshes[1], meshMaterial);
+	this->Entity[1] = GameEntity(renderEngine->GetMesh("cube"), wallMaterial);
 	this->Entity[1].ScaleTo(XMFLOAT3(50, 25, 1));
 	this->Entity[1].TranslateTo(XMFLOAT3(0, 10, 25));
 	// wall 2
-	this->Entity[2] = GameEntity(Meshes[1], meshMaterial);
+	this->Entity[2] = GameEntity(renderEngine->GetMesh("cube"), wallMaterial);
 	this->Entity[2].ScaleTo(XMFLOAT3(50, 25, 1));
 	this->Entity[2].TranslateTo(XMFLOAT3(0, 10, -25));
 	
 	// wall 3
-	this->Entity[3] = GameEntity(Meshes[1], meshMaterial);
+	this->Entity[3] = GameEntity(renderEngine->GetMesh("cube"), wallMaterial);
 	this->Entity[3].ScaleTo(XMFLOAT3(1, 25, 50));
 	this->Entity[3].TranslateTo(XMFLOAT3(-25, 10, 0));
 	// wall 4
-	this->Entity[4] = GameEntity(Meshes[1], meshMaterial);
+	this->Entity[4] = GameEntity(renderEngine->GetMesh("cube"), wallMaterial);
 	this->Entity[4].ScaleTo(XMFLOAT3(1, 25, 50));
 	this->Entity[4].TranslateTo(XMFLOAT3(25, 10, 0));
 
 	// bunny model
-	this->Entity[5] = GameEntity(multiPoly, noMaterial);
+	this->Entity[5] = GameEntity(multiPoly, meshMaterial);
 	this->Entity[5].ScaleTo(XMFLOAT3(2, 2, 2));
 	this->Entity[5].TranslateTo(XMFLOAT3(0, 0, 0));
+
+	this->Entity[6] = GameEntity(multiPoly, meshMaterial);
+	this->Entity[6].ScaleTo(XMFLOAT3(2, 2, 2));
+	this->Entity[6].TranslateTo(XMFLOAT3(14, 0, 14));
 
 	// Create Lights
 	this->numPointLights = 1;
@@ -248,9 +247,6 @@ void Game::Update(float deltaTime, float totalTime)
 	if (GetAsyncKeyState(VK_ESCAPE))
 		Quit();
 
-	// Check for poly level
-	Entity[modelChoice].WhichPoly(camera);
-
 	if (GetAsyncKeyState('W') & 0x8000)
 		camera->Forward(amount);
 	if (GetAsyncKeyState('S') & 0x8000)
@@ -260,24 +256,22 @@ void Game::Update(float deltaTime, float totalTime)
 	if (GetAsyncKeyState('D') & 0x8000)
 		camera->StrafeRight(amount);
 
+	/*
 	if (GetAsyncKeyState(' ') & 0x8000 || GetAsyncKeyState('Q') & 0x8000)
 		camera->MoveUp(amount);
 	if (GetAsyncKeyState('X') & 0x8000 || GetAsyncKeyState('E') & 0x8000)
 		camera->MoveDown(amount);
+	*/
 
 	// Check for entity swap
 	bool currTab = (GetAsyncKeyState('	') & 0x8000) != 0;
 	if (currTab && !prevTab)
-		modelChoice = (modelChoice + 1) % numEntity;
-		// check and update poly level mesh depending on camera location
-		//Entity[modelChoice].WhichPoly();
+		renderFoveal = !renderFoveal;
 	prevTab = currTab;
 
 	// RESET THE CAMERA 
 	if (GetAsyncKeyState('R') & 0x8000)
-		camera->ResetCamera();
-
-	//printf("EyePos: (%.1f, %.1f)\n", eyeTracker->GetXPos(), eyeTracker->GetYPos());
+		camera->SetPos(DirectX::XMFLOAT3(0, 3, -10));
 }
 
 // --------------------------------------------------------
@@ -285,13 +279,11 @@ void Game::Update(float deltaTime, float totalTime)
 // --------------------------------------------------------
 void Game::Draw(float deltaTime, float totalTime)
 {
-	//renderEngine->DrawOneMaterial(&Entity[modelChoice], 1, deltaTime, totalTime);
-	//* 
-	renderEngine->Render(prevMousePos.x, prevMousePos.y,
+	
+	renderEngine->FovealRender(prevMousePos.x, prevMousePos.y,
 		Entity, numEntity,
 		PointLights, numPointLights,
-		DirLights, numDirLights);
-	//*/
+		DirLights, numDirLights, renderFoveal);
 
 	// Swap back and front
 	swapChain->Present(0, 0);

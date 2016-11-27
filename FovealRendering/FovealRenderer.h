@@ -14,15 +14,15 @@ public:
 		ID3D11RenderTargetView* backBufferRTV, ID3D11DepthStencilView* depthStencilView, int width, int height);
 	virtual ~FovealRenderer();
 
-	void Render(int eyePosX, int eyePosY, GameEntity *entities, int numEntities,
+	void FovealRender(int eyePosX, int eyePosY, GameEntity *entities, int numEntities,
 		ScenePointLight* pointLights, int numPointLights,
-		SceneDirectionalLight* dirLights, int numDirLights);
+		SceneDirectionalLight* dirLights, int numDirLights, bool foveal);
 
 private:
 	void DrawLowRes(GameEntity *entities, int numEntities);
 	void DrawHighRes(GameEntity *entities, int numEntities);
 
-	void gBufferRender(int eyePosX, int eyePosY, GameEntity *entities, int numEntities);
+	void gBufferRender(int eyePosX, int eyePosY, GameEntity *entities, int numEntities, bool foveal);
 	void DrawMask(int eyePosX, int eyePosY);
 	void pointLightRender(ScenePointLight* pointLights, int numLights);
 	void directionalLightRender(SceneDirectionalLight* dirLights, int numLights);

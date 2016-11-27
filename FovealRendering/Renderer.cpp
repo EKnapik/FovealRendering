@@ -56,7 +56,6 @@ void Renderer::DrawOneMaterial(GameEntity *entities, int numEntities, float delt
 	// Send texture Info
 	pixelShader->SetSamplerState("Sampler", material->GetSampler());
 	pixelShader->SetShaderResourceView("Texture", material->GetTexture());
-	pixelShader->SetShaderResourceView("NormalMap", material->GetNormMap());
 
 	// Send Lighting Info
 	struct PointLight pointLight = PointLight();

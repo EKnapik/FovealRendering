@@ -44,10 +44,6 @@ private:
 	Camera *camera;
 	FovealRenderer *renderEngine;
 
-	// Mesh to hold actual geometry data
-	Mesh **Meshes;
-	int numMeshes;
-
 	Mesh** multiPoly;
 
 	GameEntity *Entity;
@@ -60,10 +56,13 @@ private:
 	int numDirLights;
 
 	// Wrappers for DirectX shaders to provide simplified functionality
+	ID3D11SamplerState* tmpSampler;
 	Material* meshMaterial;
+	Material* floorMaterial;
+	Material* wallMaterial;
 	Material* noMaterial;
 
-	int modelChoice = 0;
+	bool renderFoveal = true;
 	bool prevTab = false;
 	// Keeps track of the old mouse position.  Useful for 
 	// determining how far the mouse moved in a single frame.

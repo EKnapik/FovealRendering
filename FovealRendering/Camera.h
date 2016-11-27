@@ -6,6 +6,7 @@
 
 /*
 Look to camera implementation
+THIS CAMERA DOES NOT CHANGE Y.
 */
 class Camera
 {
@@ -22,19 +23,18 @@ public:
 	DirectX::XMFLOAT4X4* GetProjMat() { return &projMat; }
 	void mkProjMat(int width, int height);
 
+	void SetPos(DirectX::XMFLOAT3 newPos);
 	void Forward(float amount);
 	void Backward(float amount);
 	void StrafeRight(float amount);
 	void StrafeLeft(float amount);
-	void MoveUp(float amount) { pos.y = pos.y + amount; }
-	void MoveDown(float amount) { MoveUp(-amount); }
+	// void MoveUp(float amount) { pos.y = pos.y + amount; }
+	// void MoveDown(float amount) { MoveUp(-amount); }
 
 	void AddXRot(float amount) { xRot = xRot + amount; }
 	void SubXRot(float amount) { AddXRot(-amount); }
 	void AddYRot(float amount) { yRot = yRot + amount; }
 	void SubYRot(float amount) { AddYRot(-amount); }
-
-	void ResetCamera();
 
 private:
 	DirectX::XMFLOAT3 pos;
