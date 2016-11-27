@@ -2,10 +2,15 @@
 
 extern float tobiiEyeEventXParam;
 extern float tobiiEyeEventYParam;
+extern float tobiiPrevXPos;
+extern float tobiiPrevYPos;
 
 // CPP inplementation
-EyeTracker::EyeTracker()
+EyeTracker::EyeTracker(int width, int height)
 {
+	this->width = width;
+	this->heigth = height;
+
 	curXPos = &tobiiEyeEventXParam;
 	curYPos = &tobiiEyeEventYParam;
 
@@ -128,8 +133,16 @@ void OnGazeDataEvent(TX_HANDLE hGazeDataBehavior)
 {
 	TX_GAZEPOINTDATAEVENTPARAMS eventParams;
 	if (txGetGazePointDataEventParams(hGazeDataBehavior, &eventParams) == TX_RESULT_OK) {
-		tobiiEyeEventXParam = eventParams.X;
-		tobiiEyeEventYParam = eventParams.Y;
+		if (tobiiPrevXPos - eventParams.X > TOLLERANCE || tobiiPrevXPos - eventParams.X < -(TOLLERANCE))
+		{
+			tobiiPrevXPos = tobiiEyeEventXParam;
+			tobiiEyeEventXParam = eventParams.X;
+		}
+		if (tobiiPrevYPos - eventParams.Y > TOLLERANCE || tobiiPrevYPos - eventParams.Y < -(TOLLERANCE))
+		{
+			tobiiPrevYPos = tobiiEyeEventYParam;
+			tobiiEyeEventYParam = eventParams.Y;
+		}
 		//printf("Gaze Data: (%.1f, %.1f) timestamp %.0f ms\n", eventParams.X, eventParams.Y, eventParams.Timestamp);
 	}
 	else {

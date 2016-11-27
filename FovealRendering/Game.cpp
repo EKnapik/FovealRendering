@@ -68,7 +68,7 @@ Game::~Game()
 // --------------------------------------------------------
 void Game::Init()
 {
-	eyeTracker = new EyeTracker();
+	eyeTracker = new EyeTracker(width, height);
 	camera = new Camera();
 	camera->SetPos(XMFLOAT3(0, 3, -10));
 	renderEngine = new FovealRenderer(camera, device, context, backBufferRTV, depthStencilView, width, height);
@@ -263,11 +263,17 @@ void Game::Update(float deltaTime, float totalTime)
 		camera->MoveDown(amount);
 	*/
 
-	// Check for entity swap
+	// Render foveallly
 	bool currTab = (GetAsyncKeyState('	') & 0x8000) != 0;
 	if (currTab && !prevTab)
 		renderFoveal = !renderFoveal;
 	prevTab = currTab;
+
+	// Pull from the mouse position or the eye tracker
+	bool currShift = (GetAsyncKeyState(VK_LSHIFT) & 0x8000) != 0;
+	if (currShift && !prevShift)
+		useMouse = !useMouse;
+	prevShift = currShift;
 
 	// RESET THE CAMERA 
 	if (GetAsyncKeyState('R') & 0x8000)
@@ -279,8 +285,20 @@ void Game::Update(float deltaTime, float totalTime)
 // --------------------------------------------------------
 void Game::Draw(float deltaTime, float totalTime)
 {
-	
-	renderEngine->FovealRender(prevMousePos.x, prevMousePos.y,
+	int curX, curY;
+	if (useMouse)
+	{
+		curX = prevMousePos.x;
+		curY = prevMousePos.y;
+	}
+	else {
+		curX = eyeTracker->GetXPos();
+		curY = eyeTracker->GetYPos();
+	}
+
+	printf("(%d, %d)\n", curX, curY);
+
+	renderEngine->FovealRender(curX, curY,
 		Entity, numEntity,
 		PointLights, numPointLights,
 		DirLights, numDirLights, renderFoveal);
