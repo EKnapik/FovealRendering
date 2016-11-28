@@ -9,8 +9,8 @@
 #define TOLLERANCE 7
 #define X_OFFSET 0
 #define Y_OFFSET 0
-#define ScreenHeight 1440
-#define ScreenWidth 2560
+#define ScreenHeight 1800
+#define ScreenWidth 2880
 
 #include <Windows.h>
 #include <stdio.h>
