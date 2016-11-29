@@ -20,10 +20,11 @@ public:
 
 private:
 	void DrawLowRes(GameEntity *entities, int numEntities);
+	void DrawMidRes(GameEntity *entities, int numEntities);
 	void DrawHighRes(GameEntity *entities, int numEntities);
 
 	void gBufferRender(int eyePosX, int eyePosY, GameEntity *entities, int numEntities, bool foveal);
-	void DrawMask(int eyePosX, int eyePosY);
+	void DrawMask(int eyePosX, int eyePosY, float FovealOffset);
 	void pointLightRender(ScenePointLight* pointLights, int numLights);
 	void directionalLightRender(SceneDirectionalLight* dirLights, int numLights);
 	void DrawMultipleMaterials(GameEntity* gameEntitys, int numEntities);

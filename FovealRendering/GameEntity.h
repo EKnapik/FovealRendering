@@ -18,8 +18,10 @@ public:
 	~GameEntity();
 
 	Mesh* GetMesh() { return mesh; } // return the lowpoly version as default
+	Mesh* GetMidPoly();
 	Mesh* GetHighPoly();
 	Material* GetMaterial() { return material; }
+	bool IsDetailed() { return detailed; }
 
 	void SetMesh(Mesh* mesh);
 

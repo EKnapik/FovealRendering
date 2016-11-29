@@ -60,6 +60,15 @@ GameEntity::~GameEntity()
 {
 }
 
+Mesh * GameEntity::GetMidPoly()
+{
+	if (detailed)
+	{
+		return meshes[1];
+	}
+	return GetMesh();
+}
+
 Mesh * GameEntity::GetHighPoly()
 {
 	if (detailed)

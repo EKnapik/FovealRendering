@@ -311,6 +311,45 @@ void FovealRenderer::DrawLowRes(GameEntity *entities, int numEntities)
 	DrawMultipleMaterials(entities, numEntities);
 }
 
+void FovealRenderer::DrawMidRes(GameEntity *entities, int numEntities) {
+	SimpleVertexShader* vertexShader = GetVertexShader("gBuffer");
+	SimplePixelShader* pixelShader = GetPixelShader("gBuffer");
+	vertexShader->SetShader();
+	pixelShader->SetShader();
+
+	if (numEntities == 0) return;
+
+	for (int i = 0; i < numEntities; i++)
+	{
+		if (!entities[i].IsDetailed())
+			continue;
+
+		Material* material = entities[i].GetMaterial();
+		// Send texture Info
+		pixelShader->SetSamplerState("basicSampler", this->simpleSampler);
+		pixelShader->SetShaderResourceView("diffuseTexture", material->GetTexture());
+		//pixelShader->SetShaderResourceView("NormalMap", material->GetNormMap());
+
+		// Send Geometry
+		vertexShader->SetMatrix4x4("view", *camera->GetViewMat());
+		vertexShader->SetMatrix4x4("projection", *camera->GetProjMat());
+		pixelShader->SetFloat3("cameraPosition", *camera->GetPos());
+
+		UINT stride = sizeof(Vertex);
+		UINT offset = 0;
+		Mesh* meshTmp;
+		vertexShader->SetMatrix4x4("world", *entities[i].GetWorldClean());
+		vertexShader->CopyAllBufferData();
+		pixelShader->CopyAllBufferData();
+
+		meshTmp = entities[i].GetMidPoly();
+		ID3D11Buffer* vertTemp = meshTmp->GetVertexBuffer();
+		context->IASetVertexBuffers(0, 1, &vertTemp, &stride, &offset);
+		context->IASetIndexBuffer(meshTmp->GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+		context->DrawIndexed(meshTmp->GetIndexCount(), 0, 0);
+	}
+}
+
 
 // SETTING THIS AS A TEST
 void FovealRenderer::DrawHighRes(GameEntity *entities, int numEntities)
@@ -324,6 +363,9 @@ void FovealRenderer::DrawHighRes(GameEntity *entities, int numEntities)
 
 	for (int i = 0; i < numEntities; i++)
 	{
+		if (!entities[i].IsDetailed())
+			continue;
+
 		Material* material = entities[i].GetMaterial();
 		// Send texture Info
 		pixelShader->SetSamplerState("basicSampler", this->simpleSampler);
@@ -355,21 +397,31 @@ void FovealRenderer::gBufferRender(int eyePosX, int eyePosY, GameEntity *entitie
 {
 	ID3D11RenderTargetView* RTViews[3] = { AlbedoRTV, NormalRTV, PositionRTV };
 	context->OMSetRenderTargets(3, RTViews, depthStencilView);
+	// RENDER NORMALLY NOW ALL Low Res
+	DrawLowRes(entities, numEntities);
 	if (foveal)
 	{
-		// RENDER NORMALLY NOW ALL Low Res
-		DrawLowRes(entities, numEntities);
+	
+		// Setup Write Mask
+		context->OMSetDepthStencilState(writeMask, 0);
+		// Render masking at position
+		DrawMask(eyePosX, eyePosY, 1.5);
+		// Setup read Mask and rerender with high res geometry
+		context->OMSetDepthStencilState(readMask, 1);
+		context->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+		DrawMidRes(entities, numEntities);
+		context->ClearDepthStencilView(depthStencilView,
+			D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 		// Setup Write Mask
 		context->OMSetDepthStencilState(writeMask, 0);
 		// Render masking at position
-		DrawMask(eyePosX, eyePosY);
-
+		DrawMask(eyePosX, eyePosY, 3.0);
 		// Setup read Mask and rerender with high res geometry
 		context->OMSetDepthStencilState(readMask, 1);
-		context->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+		
 	}
-	
+	context->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	DrawHighRes(entities, numEntities);
 	// Reset depth stencil
 	context->OMSetDepthStencilState(0, 0);
@@ -377,10 +429,9 @@ void FovealRenderer::gBufferRender(int eyePosX, int eyePosY, GameEntity *entitie
 
 
 // Don't need a pixel shader
-void FovealRenderer::DrawMask(int eyePosX, int eyePosY) {
+void FovealRenderer::DrawMask(int eyePosX, int eyePosY, float FovealOffset) {
 	// Compute amount to offset center mask
 	// inverting Y because going down is positive y for DirectX
-	const float FovealOffset = 4.0;
 	float offsetX = ((eyePosX * 2.0) - windowWidth) / windowWidth * FovealOffset;
 	float offsetY = -((eyePosY * 2.0) - windowHeight) / windowHeight * FovealOffset;
 
