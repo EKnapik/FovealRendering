@@ -296,8 +296,6 @@ void Game::Draw(float deltaTime, float totalTime)
 		curY = eyeTracker->GetYPos();
 	}
 
-	printf("(%d, %d)\n", curX, curY);
-
 	renderEngine->FovealRender(curX, curY,
 		Entity, numEntity,
 		PointLights, numPointLights,
