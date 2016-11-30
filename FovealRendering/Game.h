@@ -44,7 +44,8 @@ private:
 	Camera *camera;
 	FovealRenderer *renderEngine;
 
-	Mesh** multiPoly;
+	Mesh** multiBunny;
+	Mesh** multiDillo;
 
 	GameEntity *Entity;
 	int numEntity;

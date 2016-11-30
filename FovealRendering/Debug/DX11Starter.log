@@ -1,28 +1,11 @@
-<<<<<<< HEAD
-﻿  FovealRenderer.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(435): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(436): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(491): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\fovealrenderer.cpp(492): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+﻿  Game.cpp
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(224): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(247): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(306): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(307): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(365): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(366): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.exe
   DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.pdb (Full PDB)
-=======
-﻿  Main.cpp
-  Game.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(213): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(236): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(295): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(296): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(356): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(357): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  Generating Code...
-  Compiling...
-  EyeTracker.cpp
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\eyetracker.cpp(139): warning C4244: '=': conversion from 'TX_REAL' to 'float', possible loss of data
-c:\users\eric\documents\coding\fovealrendering\fovealrendering\eyetracker.cpp(144): warning C4244: '=': conversion from 'TX_REAL' to 'float', possible loss of data
-  Generating Code...
-  DX11Starter.vcxproj -> C:\Users\Eric\Documents\coding\FovealRendering\FovealRendering\Debug\FovealRendering.exe
-  DX11Starter.vcxproj -> C:\Users\Eric\Documents\coding\FovealRendering\FovealRendering\Debug\FovealRendering.pdb (Full PDB)
->>>>>>> 95dd69ec13eec3d528aec5fda7fdf1ad09ebceab
   ..\tobii_lib\x86\Tobii.EyeX.Client.dll
           1 file(s) copied.

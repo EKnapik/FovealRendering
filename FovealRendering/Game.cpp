@@ -44,9 +44,14 @@ Game::~Game()
 	// we've made in the Game class
 
 	for (int i = 0; i < 3; i++) {
-		delete multiPoly[i];
+		delete multiBunny[i];
 	}
-	delete multiPoly;
+	delete multiBunny;
+
+	for (int i = 0; i < 3; i++) {
+		delete multiDillo[i];
+	}
+	delete multiDillo;
 
 	delete[] Entity;
 
@@ -155,24 +160,21 @@ void Game::CreateBasicGeometry()
 	XMFLOAT4 green = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT4 blue = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
 
-
 	renderEngine->AddMesh("cube", new Mesh("Debug/Assets/cube.obj", device));
-	//this->Meshes[6] = new Mesh("Debug/Assets/bunny.obj", device);
-	//this->Meshes[7] = new Mesh("Debug/Assets/armadillo.obj", device);
 
 	// low, mid, high poly respectively
-	this->multiPoly = new Mesh*[3];
-	multiPoly[0] = new Mesh("Debug/Assets/low_bunny.obj", device);
-	multiPoly[1] = new Mesh("Debug/Assets/mid_bunny.obj", device);
-	multiPoly[2] = new Mesh("Debug/Assets/bunny.obj", device);
+	this->multiBunny = new Mesh*[3];
+	multiBunny[0] = new Mesh("Debug/Assets/low_bunny.obj", device);
+	multiBunny[1] = new Mesh("Debug/Assets/mid_bunny.obj", device);
+	multiBunny[2] = new Mesh("Debug/Assets/bunny.obj", device);
+
+	this->multiDillo = new Mesh*[3];
+	multiDillo[0] = new Mesh("Debug/Assets/low_armadillo.obj", device);
+	multiDillo[1] = new Mesh("Debug/Assets/mid_armadillo.obj", device);
+	multiDillo[2] = new Mesh("Debug/Assets/armadillo.obj", device);
 	
-	/*
-	multiPoly[0] = Meshes[0];
-	multiPoly[1] = Meshes[3];
-	multiPoly[2] = Meshes[4];
-	*/
 	// Let's try not to follow pointers
-	this->numEntity = 7;
+	this->numEntity = 9;
 	this->Entity = new GameEntity[numEntity];
 
 	// floor
@@ -199,13 +201,22 @@ void Game::CreateBasicGeometry()
 	this->Entity[4].TranslateTo(XMFLOAT3(25, 10, 0));
 
 	// bunny model
-	this->Entity[5] = GameEntity(multiPoly, meshMaterial);
+	this->Entity[5] = GameEntity(multiBunny, meshMaterial);
 	this->Entity[5].ScaleTo(XMFLOAT3(2, 2, 2));
 	this->Entity[5].TranslateTo(XMFLOAT3(0, 0, 0));
 
-	this->Entity[6] = GameEntity(multiPoly, meshMaterial);
+	this->Entity[6] = GameEntity(multiBunny, meshMaterial);
 	this->Entity[6].ScaleTo(XMFLOAT3(2, 2, 2));
 	this->Entity[6].TranslateTo(XMFLOAT3(14, 0, 14));
+
+	// armadillo model
+	this->Entity[7] = GameEntity(multiDillo, meshMaterial);
+	this->Entity[7].ScaleTo(XMFLOAT3(2, 2, 2));
+	this->Entity[7].TranslateTo(XMFLOAT3(-14, 2, 14));
+
+	this->Entity[8] = GameEntity(multiDillo, meshMaterial);
+	this->Entity[8].ScaleTo(XMFLOAT3(2, 2, 2));
+	this->Entity[8].TranslateTo(XMFLOAT3(-14, 2, -14));
 
 	// Create Lights
 	this->numPointLights = 1;
