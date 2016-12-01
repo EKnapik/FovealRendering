@@ -46,7 +46,7 @@ Website/Final document (Both)
 
 
 # Final Paper
-[Download PDF Here](https://github.com/EKnapik/FovealRendering/documentation/foveal-rendering.pdf) or continue to scroll
+Download final paper PDF [Here](https://github.com/EKnapik/FovealRendering/documentation/foveal-rendering.pdf) or continue to scroll
 ![page 1](https://github.com/EKnapik/FovealRendering/blob/master/documentation/foveal-rendering/foveal-rendering-1.png)
 ![page 2](https://github.com/EKnapik/FovealRendering/blob/master/documentation/foveal-rendering/foveal-rendering-2.png)
 ![page 3](https://github.com/EKnapik/FovealRendering/blob/master/documentation/foveal-rendering/foveal-rendering-3.png)
@@ -56,4 +56,3 @@ Website/Final document (Both)
 ![page 7](https://github.com/EKnapik/FovealRendering/blob/master/documentation/foveal-rendering/foveal-rendering-7.png)
 ![page 8](https://github.com/EKnapik/FovealRendering/blob/master/documentation/foveal-rendering/foveal-rendering-8.png)
 ![page 9](https://github.com/EKnapik/FovealRendering/blob/master/documentation/foveal-rendering/foveal-rendering-9.png)
-Download PDF [Here](https://github.com/EKnapik/FovealRendering/documentation/foveal-rendering.pdf)
