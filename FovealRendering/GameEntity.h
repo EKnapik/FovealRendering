@@ -18,7 +18,10 @@ public:
 	~GameEntity();
 
 	Mesh* GetMesh() { return mesh; } // return the lowpoly version as default
+	Mesh* GetMidPoly();
+	Mesh* GetHighPoly();
 	Material* GetMaterial() { return material; }
+	bool IsDetailed() { return detailed; }
 
 	void SetMesh(Mesh* mesh);
 
@@ -55,9 +58,9 @@ public:
 	void WhichPoly(Camera* camera);
 
 	void CreateWorldMat();
-	DirectX::XMFLOAT4X4 GetWorld();
-	DirectX::XMFLOAT4X4 GetWorldClean();
-	DirectX::XMFLOAT4X4 GetRotationMat();
+	DirectX::XMFLOAT4X4* GetWorld();
+	DirectX::XMFLOAT4X4* GetWorldClean();
+	DirectX::XMFLOAT4X4* GetRotationMat();
 
 private:
 	Mesh **meshes; // low, mid and high poly array

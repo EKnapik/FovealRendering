@@ -7,7 +7,7 @@ GameEntity::GameEntity(Mesh **meshes, Material* material)
 {
 	this->detailed = true;
 	this->meshes = meshes;
-	this->mesh = meshes[0];//WhichPoly();
+	this->mesh = meshes[0];
 	this->material = material;
 	this->dirty = true;
 	this->pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -20,7 +20,7 @@ GameEntity::GameEntity(Mesh **meshes, DirectX::XMFLOAT3 pos, Material* material)
 {
 	this->detailed = true;
 	this->meshes = meshes;
-	this->mesh = meshes[0];//WhichPoly();
+	this->mesh = meshes[0];
 	this->material = material;
 	this->dirty = true;
 	this->pos = pos;
@@ -34,7 +34,7 @@ GameEntity::GameEntity(Mesh* mesh, Material* material)
 {
 	this->detailed = false;
 	this->mesh = mesh;
-	this->meshes = new Mesh*[1]{mesh};
+	this->meshes = nullptr;
 	this->material = material;
 	this->dirty = true;
 	this->pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -47,7 +47,7 @@ GameEntity::GameEntity(Mesh* mesh, DirectX::XMFLOAT3 pos, Material* material)
 {
 	this->detailed = false;
 	this->mesh = mesh;
-	this->meshes = new Mesh*[1]{mesh};
+	this->meshes = nullptr;
 	this->material = material;
 	this->dirty = true;
 	this->pos = pos;
@@ -58,6 +58,24 @@ GameEntity::GameEntity(Mesh* mesh, DirectX::XMFLOAT3 pos, Material* material)
 
 GameEntity::~GameEntity()
 {
+}
+
+Mesh * GameEntity::GetMidPoly()
+{
+	if (detailed)
+	{
+		return meshes[1];
+	}
+	return GetMesh();
+}
+
+Mesh * GameEntity::GetHighPoly()
+{
+	if (detailed)
+	{
+		return meshes[2];
+	}
+	return GetMesh();
 }
 
 void GameEntity::SetMesh(Mesh* mesh) {
@@ -195,9 +213,9 @@ void GameEntity::WhichPoly(Camera* camera)
 	float midRange;
 
 	// transform object to camera space and use to determine which poly level mesh to show
-	XMFLOAT4X4 world = GetWorld();
+	XMFLOAT4X4 world = *GetWorld();
 	//XMFLOAT4X4 world = camera->GetViewMat();
-	DirectX::XMFLOAT3 camPos = camera->GetPos();
+	DirectX::XMFLOAT3 camPos = *camera->GetPos();
 	XMFLOAT4 pos4x4 = { pos.x, pos.y, pos.z, 1.0f };
 	XMVECTOR vecPos4x4 = XMLoadFloat4(&pos4x4);
 	XMMATRIX worldMatrix = XMLoadFloat4x4(&world);
@@ -224,24 +242,6 @@ void GameEntity::WhichPoly(Camera* camera)
 	{
 		this->mesh = meshes[2];
 	}
-
-	/*
-	// Stupid method for testing rn ~~~~
-	float dif = pos.z - camPos.z;
-	lowRange = 17.0f;
-	midRange = 10.0f;
-	if (dif > lowRange ) // low poly
-	{
-		this->mesh = meshes[0];
-	}
-	else if (dif > midRange && dif <= lowRange ) // mid poly
-	{
-		this->mesh = meshes[1];
-	}
-	else // high poly
-	{
-		this->mesh = meshes[2];
-	}*/
 	
 }
 
@@ -257,12 +257,12 @@ void GameEntity::CreateWorldMat()
 	this->dirty = false;
 }
 
-DirectX::XMFLOAT4X4 GameEntity::GetWorld()
+DirectX::XMFLOAT4X4* GameEntity::GetWorld()
 {
-	return this->world;
+	return &this->world;
 }
 
-DirectX::XMFLOAT4X4 GameEntity::GetWorldClean()
+DirectX::XMFLOAT4X4* GameEntity::GetWorldClean()
 {
 	if (dirty) {
 		CreateWorldMat();
@@ -270,13 +270,13 @@ DirectX::XMFLOAT4X4 GameEntity::GetWorldClean()
 	return GetWorld();
 }
 
-DirectX::XMFLOAT4X4 GameEntity::GetRotationMat()
+DirectX::XMFLOAT4X4* GameEntity::GetRotationMat()
 {
 	XMFLOAT4X4 returnMat;
 	XMVECTOR quaternion = XMLoadFloat4(&this->rotQtrn);
 	XMStoreFloat4x4(&returnMat,
 		XMMatrixRotationQuaternion(quaternion));
-	return returnMat;
+	return &returnMat;
 }
 
 

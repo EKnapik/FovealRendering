@@ -1,4 +1,11 @@
-﻿  GameEntity.cpp
-  DX11Starter.vcxproj -> C:\Users\vicmcg\Documents\FovealRendering\FovealRendering\Debug\FovealRendering.exe
+﻿  Game.cpp
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(224): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(247): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(306): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(307): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(365): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\eric\documents\coding\fovealrendering\fovealrendering\game.cpp(366): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.exe
+  DX11Starter.vcxproj -> C:\Users\Eric\Documents\Coding\FovealRendering\FovealRendering\Debug\FovealRendering.pdb (Full PDB)
   ..\tobii_lib\x86\Tobii.EyeX.Client.dll
           1 file(s) copied.

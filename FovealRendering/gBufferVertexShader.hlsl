@@ -13,6 +13,7 @@ struct VertexShaderInput
 	float3 position		: POSITION;     // XYZ position
 	float3 normal		: NORMAL;
 	float2 uv			: TEXCOORD;
+	float3 tangent		: TANGENT;
 };
 
 // Struct representing the data we're sending down the pipeline
@@ -21,6 +22,7 @@ struct VertexToPixel
 	float4 position		: SV_POSITION;
 	float3 worldPos		: POSITION;
 	float3 normal		: NORMAL;
+	float3 tangent		: TANGENT;
 	float2 uv			: TEXCOORD0;
 };
 
@@ -45,6 +47,9 @@ VertexToPixel main( VertexShaderInput input )
 	// transform normal
 	output.normal = mul(input.normal, (float3x3)world);
 	output.normal = normalize(output.normal);
+	//output.tangent = mul(input.tangent, (float3x3)world);
+	//output.tangent = normalize(output.tangent);
+	output.tangent = float3(0, 0, 0);
 
 	output.uv = input.uv;
 	// This github uses depth then recalculates the world position, so the buffer is smaller

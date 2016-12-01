@@ -3,12 +3,14 @@
 #include "DXCore.h"
 #include "SimpleShader.h"
 #include <DirectXMath.h>
+#include <map>
+#include <string>
 #include "Mesh.h"
 #include "GameEntity.h"
 #include "Camera.h"
 #include "Lights.h"
-#include "Renderer.h"
 #include "EyeTracker.h"
+#include "FovealRenderer.h"
 
 
 class Game 
@@ -40,23 +42,33 @@ private:
 
 	EyeTracker *eyeTracker;
 	Camera *camera;
-	Renderer *renderEngine;
+	FovealRenderer *renderEngine;
 
-	// Mesh to hold actual geometry data
-	Mesh **Meshes;
-	int numMeshes;
+	Mesh** multiBunny;
+	Mesh** multiDillo;
 
 	GameEntity *Entity;
 	int numEntity;
 
+	ScenePointLight* PointLights;
+	int numPointLights;
+
+	SceneDirectionalLight* DirLights;
+	int numDirLights;
+
 	// Wrappers for DirectX shaders to provide simplified functionality
+	ID3D11SamplerState* tmpSampler;
 	Material* meshMaterial;
+	Material* floorMaterial;
+	Material* wallMaterial;
 	Material* noMaterial;
 
-	int modelChoice = 0;
+	bool renderFoveal = true;
 	bool prevTab = false;
-	// Keeps track of the old mouse position.  Useful for 
-	// determining how far the mouse moved in a single frame.
+
+	bool useMouse = true;
+	bool prevShift = false;
+
 	POINT prevMousePos;
 };
 
