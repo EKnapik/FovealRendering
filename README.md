@@ -12,7 +12,7 @@ Using the knowledge of how the human visual system works the program will be abl
 Step 1...
 
 # Demo Video
-![demo](https://github.com/EKnapik/FovealRendering/blob/master/documentation/youtube.png)[embed](https://youtu.be/5cbNQI526aU)[/embed]
+[![demo](https://github.com/EKnapik/FovealRendering/blob/master/documentation/youtube.png)](https://youtu.be/5cbNQI526aU)
 
 # References
 G. Brian, et al. "Foveated 3D graphics." ACM Transactions on Graphics (TOG) 31 (6), pp. 164 
