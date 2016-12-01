@@ -38,4 +38,4 @@ Foveal Level of Detail choosing (eye tracking based)
 	Meshes within foveal projection (Vic)
 Website/Final document (Both)
 
-![Alt text](https://github.com/EKnapik/FovealRendering/files/624990/foveal-rendering.pdf)
+![Alt text](https://github.com/EKnapik/FovealRendering/blob/master/foveal-rendering.pdf)
