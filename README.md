@@ -32,18 +32,19 @@ Week 7-8: Level of Detail Implemented <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scene graph. The rendering system inspects and can interpret a scene graph <br />
 Week 9: Mid-semester presentations <br />
 Week 10-13: Combined Level of Detail with eye tracking <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create three layers and mask together
 Week 14: Website finalization <br />
 Week 15-16: Presentations <br />
 
 # Roles
 Engine Framework <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Model Loading <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scene Layout (Vic) <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DirectX Rendering (Eric) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-Model Loading <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-Scene Layout (Vic) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-DirectX Rendering (Eric) <br />
 Eye Tracking Integration (Eric) <br />
 Level of Detail Algorithm (distance based) (Vic) <br />
 Foveal Level of Detail choosing (eye tracking based) <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Meshes within foveal projection (Vic) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-Meshes within foveal projection (Vic) <br />
 Website/Final document (Both) <br />
 
 
