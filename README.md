@@ -37,3 +37,5 @@ Level of Detail Algorithm (distance based) (Vic)
 Foveal Level of Detail choosing (eye tracking based)
 	Meshes within foveal projection (Vic)
 Website/Final document (Both)
+
+![Alt text](https://github.com/EKnapik/FovealRendering/files/624990/foveal-rendering.pdf)
